@@ -1,0 +1,202 @@
+/* 이벤트바 보더 투명처리 */
+.fc-event{
+  border: none;
+}
+
+/* ───────────────────────
+   이벤트 종류별 컬러
+─────────────────────── */
+
+/* 통상 이벤트 */
+.fc-event.type-std,
+.fc-event.type-std .fc-daygrid-event-dot{
+  background-color: #7fb0d7;
+  border-color: #7fb0d7;
+}
+
+/* 카페바 이벤트 */
+.fc-event.type-cafe,
+.fc-event.type-cafe .fc-daygrid-event-dot{
+  background-color: #cfa883;
+  border-color: #cfa883;
+}
+
+/* 브레파 이벤트 */
+.fc-event.type-pt {
+  background-image: linear-gradient(135deg, #da64f7, #2ca5f1, #5ce4d4);
+}
+
+/* 한정 이벤트 */
+.fc-event.type-limited,
+.fc-event.type-limited .fc-daygrid-event-dot{
+  background-color: #f08f8f;
+  border-color: #f08f8f;
+}
+
+/* 하코 이벤트 */
+.fc-event.type-main,
+.fc-event.type-main .fc-daygrid-event-dot{
+  background-color: #2384de;
+  border-color: #2384de;
+}
+
+.fc-event.type-sim,
+.fc-event.type-sim .fc-daygrid-event-dot{
+  background-color: #f17eb3;
+  border-color: #f17eb3;
+}
+
+.fc-event.type-admin,
+.fc-event.type-admin .fc-daygrid-event-dot{
+  background-color: #e0a82b;
+  border-color: #e0a82b;
+}
+
+.fc-event.type-watchdog,
+.fc-event.type-watchdog .fc-daygrid-event-dot{
+  background-color: #bb3838;
+  border-color: #bb3838;
+}
+
+.fc-event.type-nego,
+.fc-event.type-nego .fc-daygrid-event-dot{
+  background-color: #9a21b1;
+  border-color: #9a21b1;
+}
+
+.fc-event.type-st,
+.fc-event.type-st .fc-daygrid-event-dot{
+  background-color: #6baa3d;
+  border-color: #6baa3d;
+}
+/* 하코 이벤트 끝 */
+
+/* ───────────────────────
+   캐릭터별 컬러
+─────────────────────── */
+
+.type-bd.char-kosaka,
+.bd-point.char-kosaka .fc-daygrid-event-dot{
+  background-color: #B22222;
+  border-color: #B22222;
+}
+
+.type-bd.char-kise,
+.bd-point.char-kise .fc-daygrid-event-dot{
+  background-color: #7da852;
+  border-color: #7da852;
+}
+
+.type-bd.char-suoh,
+.bd-point.char-suoh .fc-daygrid-event-dot{
+  background-color: #FFC02D;
+  border-color: #FFC02D;
+}
+
+.type-bd.char-ayato,
+.bd-point.char-ayato .fc-daygrid-event-dot{
+  background-color: #FD1493;
+  border-color: #FD1493;
+}
+
+.type-bd.char-ukyo,
+.bd-point.char-ukyo .fc-daygrid-event-dot{
+  background-color: #A553EB;
+  border-color: #A553EB;
+}
+
+.type-bd.char-hinomiya,
+.bd-point.char-hinomiya .fc-daygrid-event-dot{
+  background-color: #FE8A23;
+  border-color: #FE8A23;
+}
+
+.type-bd.char-kanno,
+.bd-point.char-kanno .fc-daygrid-event-dot{
+  background-color: #6495ED;
+  border-color: #6495ED;
+}
+
+.type-bd.char-tsukimoto,
+.bd-point.char-tsukimoto .fc-daygrid-event-dot{
+  background-color:#8bccd6;
+  border-color:#8bccd6;
+}
+
+.type-bd.char-ichikawa,
+.bd-point.char-ichikawa .fc-daygrid-event-dot{
+  background-color:#e9dc69;
+  border-color:#e9dc69;
+}
+
+.type-bd.char-okiya,
+.bd-point.char-okiya .fc-daygrid-event-dot{
+  background-color:#9a98c1;
+  border-color:#9a98c1;
+}
+
+.type-bd.char-fushimi,
+.bd-point.char-fushimi .fc-daygrid-event-dot{
+  background-color:#3f60be;
+  border-color:#3f60be;
+}
+
+.type-bd.char-mikado,
+.bd-point.char-mikado .fc-daygrid-event-dot{
+  background-color:#c437bc;
+  border-color:#c437bc;
+}
+
+.type-bd.char-shinkai,
+.bd-point.char-shinkai .fc-daygrid-event-dot{
+  background-color:#E04D21;
+  border-color:#E04D21;
+}
+
+.type-bd.char-aizawa,
+.bd-point.char-aizawa .fc-daygrid-event-dot{
+  background-color:#388138;
+  border-color:#388138;
+}
+
+.type-bd.char-arima,
+.bd-point.char-arima .fc-daygrid-event-dot{
+  background-color:#df507f;
+  border-color:#df507f;
+}
+
+.type-bd.char-shido,
+.bd-point.char-shido .fc-daygrid-event-dot{
+  background-color:#F09C65;
+  border-color:#F09C65;
+}
+
+.type-bd.char-tateshina,
+.bd-point.char-tateshina .fc-daygrid-event-dot{
+  background-color:#7043bb;
+  border-color:#7043bb;
+}
+
+.type-bd.char-onda,
+.bd-point.char-onda .fc-daygrid-event-dot{
+  background-color:#61C892;
+  border-color:#61C892;
+}
+
+.type-bd.char-nina,
+.bd-point.char-nina .fc-daygrid-event-dot{
+  background-color:#13bffc;
+  border-color:#13bffc;
+}
+
+.type-bd.char-kamiya,
+.bd-point.char-kamiya .fc-daygrid-event-dot{
+  background-color:#5E76BC;
+  border-color:#5E76BC;
+}
+
+.type-bd.char-manami,
+.bd-point.char-manami .fc-daygrid-event-dot{
+  background-color:#DE7DF3;
+  border-color:#DE7DF3;
+}
