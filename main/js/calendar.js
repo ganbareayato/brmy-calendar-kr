@@ -51,11 +51,10 @@ async function loadEvents() {
     const res = await fetch(jsonUrl);
     const data = (await res.json()).filter(ev => ev.id !== 1);
 
-    const attendChars = getAttendingChars(ev.id);
     const events = (await Promise.all(
       data.map(async (ev, i) => {
         const classList = [];
-
+        const attendChars = getAttendingChars(ev.id);
         if (ev.subtype?.includes('std')) {
           classList.push('type-std');
         } else {
