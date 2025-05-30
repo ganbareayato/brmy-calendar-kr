@@ -1,0 +1,181 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 2rem;
+  background-color: #fdfdfd;
+  color: #333;
+}
+
+#calendar {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+table.fc-scrollgrid{
+  border:0;
+}
+
+.fc-event {
+  font-size: 0.85em;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+/* 상단 툴바 부분 design */
+.fc .fc-toolbar {
+  justify-content: flex-start;
+  gap: 50px;
+}
+
+.fc .fc-button {
+  background-color: transparent;
+  color: #666;
+  border: 1px solid #ccc;
+  border-radius: 9999px;
+  font-size: 0.9em;
+  padding: 0.4em 1.2em;
+  transition: background-color 0.2s;
+}
+
+.fc .fc-button:hover,
+.fc .fc-button:focus,
+.fc .fc-button:active {
+  background-color: #eee;
+  color: #333;
+  border-color: #999;
+}
+
+/* disabled 상태 today 버튼: 연한 색상, hover 제거 */
+.fc .fc-today-button:disabled {
+  color: #999;
+  border-color: #ddd;
+  background-color: transparent;
+  opacity: 0.6;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* 월 이동 버튼 살짝 띄워서 */
+.fc .fc-prev-button,
+.fc .fc-next-button {
+  margin: 0 0.2em;
+}
+
+/* 테이블 부분 양식 편집 */
+
+/* 일자 중앙정렬 */
+.fc-daygrid-day-number {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+/* 테이블, 셀 테두리 제거 */
+.fc-theme-standard .fc-scrollgrid,
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border: none;
+}
+
+.fc-daygrid-day.fc-day-past {
+  /* background-color: #f3f4f6; */
+  color: #9ca3af; 
+}
+
+/* 과거 날짜 안의 이벤트 바 흐리게 */
+.fc-daygrid-day.fc-day-past .fc-event {
+  opacity: 0.5;
+}
+
+/* 이벤트바 수정 */
+.fc .fc-event {
+  min-height: 4em;
+  padding: 2px 4px;
+  font-size: 0.85em;
+}
+
+/* 타이틀 줄바꿈 관련 */
+.fc-event-title{
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: keep-all;
+  line-height: 1.2;
+}
+
+/* point 이벤트들은 배경색 제거 */
+.fc-event[class*="-point"] {
+  background-color: transparent !important;
+  background-image: none !important;
+  font-size:0.7rem;
+}
+
+/* 시작시간 비표시 */
+.fc-event-time,
+.fc-event-start.type-bd.fc-daygrid-dot-event .fc-event-time {
+  display: none !important;
+}
+
+/* 도트이벤트 정렬변경 */
+/* .fc-event.fc-daygrid-dot-event:not(.type-bd){
+ flex-wrap: wrap; 
+} 
+
+.fc-event-main-frame{
+  flex-direction: column;
+}
+*/
+
+/* 이벤트 사이 간격주기 */
+.fc-daygrid-event-harness.fc-daygrid-event-harness-abs{
+  padding:1px 0;
+}
+
+/* 오늘날짜 강조 */
+.fc .fc-daygrid-day.fc-day-today {
+  position: relative;
+  background: transparent;
+}
+
+.fc-day-today .fc-daygrid-day-number span{
+  font-weight: bold;
+}
+
+div.today-border{
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border: 3px solid transparent;
+  border-radius: 6px;
+  margin: -1px;
+
+  background:
+    linear-gradient(white, white) padding-box,
+    linear-gradient(45deg, #1db8ff, #fd61e7) border-box;
+  /* -webkit-mask:
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0); */
+  /* -webkit-mask-composite: xor;
+          mask-composite: exclude; */
+
+  pointer-events: none; /* 클릭 방지 */
+}
+/* 오늘날짜 강조 끝 */
+
+
+/* 단일이벤트 도트 양식 수정 */
+.fc-daygrid-event {
+  display: flex;
+  align-items: stretch; /* 좌측 바가 세로로 쭉 늘어나도록 */
+}
+
+.fc-daygrid-event-dot {
+  position: absolute;
+  left:0;
+  height:40%;
+  border-radius: 0; /* 직선으로 */
+  border-radius: 10px;
+  margin:0;
+}
+
+.fc-event-title {
+  padding-left: 7px; /* 바 두께 + 여백 */
+}
+/* 단일이벤트 도트 양식 수정 끝 */
