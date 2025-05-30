@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 async function loadEvents() {
   const jsonUrl = 'https://json-loader.ganbato-staff.workers.dev/load?file=event.json';
+  const attendChars = await getAttendingChars(ev.id);
   try {
     const res = await fetch(jsonUrl);
     const data = (await res.json()).filter(ev => ev.id !== 1);
@@ -50,7 +51,6 @@ async function loadEvents() {
         ev.subtype?.forEach(type => classList.push(`type-${type}`));
 
         // 등장 캐릭터 추가 (보상, bd 포함)
-        const attendChars = await getAttendingChars(ev.id);
         attendChars.forEach(c => classList.push(`char-${c}`));
 
         return {
