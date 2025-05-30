@@ -1,6 +1,5 @@
-document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener('DOMContentLoaded', async function () {  
   const calendarEl = document.getElementById('calendar');
-
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     locale: 'ko',
@@ -30,13 +29,28 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 });
 
-async function loadEvents() {
+
+let cardList = [];
+async function loadCardList() {
   const jsonUrl = 'https://json-loader.ganbato-staff.workers.dev/load?file=event.json';
-  const attendChars = await getAttendingChars(ev.id);
+  try {
+    const res = await fetch(jsonUrl);
+    cardList = await res.json();
+  } catch (err) {
+    console.error('카드 리스트 불러오기 실패:', err);
+  }
+}
+
+async function loadEvents() {
+  if (cardList.length === 0) {
+    await loadCardList();
+  }
+  
   try {
     const res = await fetch(jsonUrl);
     const data = (await res.json()).filter(ev => ev.id !== 1);
 
+    const attendChars = getAttendingChars(ev.id);
     const events = (await Promise.all(
       data.map(async (ev, i) => {
         const classList = [];
@@ -75,24 +89,12 @@ async function loadEvents() {
 }
 
 
-async function getAttendingChars(eventId) {
-  const jsonUrl = 'https://json-loader.ganbato-staff.workers.dev/load?file=card_list.json';
-  try {
-    const res = await fetch(jsonUrl);
-    const cards = await res.json();
-
-    // 해당 이벤트 ID와 매칭되는 캐릭터들 필터링
-    const matched = cards.filter(card => card.event_id === eventId);
-
-    // 중복 제거 + 소문자 변환
-    const chars = [...new Set(matched.map(c => c.char_id.toLowerCase()))];
-
-    return chars;
-  } catch (err) {
-    console.error('캐릭터 데이터를 불러오지 못했습니다:', err);
-    return [];
-  }
+function getAttendingChars(eventId) {
+  const matched = cardList.filter(card => card.event_id === eventId);
+  const chars = [...new Set(matched.map(c => c.char_id.toLowerCase()))];
+  return chars;
 }
+
 
 function parseLocalDate(dateStr) {
   if (!dateStr) return null;
