@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 let cardList = [];
 async function loadCardList() {
-  const jsonUrl = 'https://json-loader.ganbato-staff.workers.dev/load?file=event.json';
   try {
+    const jsonUrl = 'https://json-loader.ganbato-staff.workers.dev/load?file=card_list.json';
     const res = await fetch(jsonUrl);
     cardList = await res.json();
   } catch (err) {
@@ -47,6 +47,7 @@ async function loadEvents() {
   }
   
   try {
+    const jsonUrl = 'https://json-loader.ganbato-staff.workers.dev/load?file=event.json';
     const res = await fetch(jsonUrl);
     const data = (await res.json()).filter(ev => ev.id !== 1);
 
