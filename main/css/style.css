@@ -26,6 +26,20 @@ table.fc-scrollgrid{
   gap: 50px;
 }
 
+.fc .fc-toolbar .fc-toolbar-chunk:first-child{
+  display:flex;
+  flex-direction: column;
+  gap:5px;
+}
+
+.fc-direction-ltr .fc-toolbar .fc-toolbar-chunk:first-child .fc-today-botton{
+  margin-left:0;
+}
+
+.fc .fc-button-group{
+  gap:4px;
+}
+
 .fc .fc-button {
   background-color: transparent;
   color: #666;
@@ -52,12 +66,6 @@ table.fc-scrollgrid{
   opacity: 0.6;
   cursor: default;
   pointer-events: none;
-}
-
-/* 월 이동 버튼 살짝 띄워서 */
-.fc .fc-prev-button,
-.fc .fc-next-button {
-  margin: 0 0.2em;
 }
 
 /* 테이블 부분 양식 편집 */
