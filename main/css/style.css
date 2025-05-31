@@ -36,8 +36,8 @@ table.fc-scrollgrid{
   gap:5px;
 }
 
-.fc-direction-ltr .fc-toolbar .fc-toolbar-chunk:first-child .fc-today-botton{
-  margin-left:0 !important;
+.fc-direction-ltr .fc-toolbar .fc-toolbar-chunk:first-child .fc-today-button{
+  margin-left:0;
 }
 
 .fc .fc-button-group{
