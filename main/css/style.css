@@ -32,7 +32,7 @@ table.fc-scrollgrid{
   border: 1px solid #ccc;
   border-radius: 9999px;
   font-size: 0.9em;
-  padding: 0.4em 1.2em;
+  padding: 0.3em 0.6em;
   transition: background-color 0.2s;
 }
 
