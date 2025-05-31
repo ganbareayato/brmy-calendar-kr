@@ -37,7 +37,7 @@ table.fc-scrollgrid{
 }
 
 .fc-direction-ltr .fc-toolbar .fc-toolbar-chunk:first-child .fc-today-botton{
-  margin-left:0;
+  margin-left:0 !important;
 }
 
 .fc .fc-button-group{
