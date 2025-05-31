@@ -177,7 +177,7 @@ function splitEventByPhases(ev) {
         title: `${ev.title} 가챠`,
         start: today.toISOString(),
         end: gachaEnd?.toISOString() ?? end.toISOString(),
-        allDay: false,
+        allDay: true,
         classNames: [...classNamesBase, 'phase-current']
       });
     }
