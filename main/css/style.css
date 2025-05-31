@@ -20,6 +20,10 @@ table.fc-scrollgrid{
   padding: 2px;
 }
 
+.fc-header-toolbar{
+  align-items: center;
+}
+
 /* 상단 툴바 부분 design */
 .fc .fc-toolbar {
   justify-content: flex-start;
