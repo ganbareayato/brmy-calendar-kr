@@ -8,31 +8,31 @@
 ─────────────────────── */
 
 /* 통상 이벤트 */
-.fc-event.type-std,
-.fc-event.type-std .fc-daygrid-event-dot{
-  background-color: #7fb0d7;
-  border-color: #7fb0d7;
+.fc-event,
+.fc-event .fc-daygrid-event-dot{
+  background-color:  #7fb0d7;
+  border-color:  #7fb0d7;
 }
 
-/* 카페바 이벤트 */
+/*
 .fc-event.type-cafe,
 .fc-event.type-cafe .fc-daygrid-event-dot{
   background-color: #cfa883;
   border-color: #cfa883;
 }
 
-/* 브레파 이벤트 */
+
 .fc-event.type-pt {
   background-image: linear-gradient(135deg, #da64f7, #2ca5f1, #5ce4d4);
 }
 
-/* 한정 이벤트 */
+
 .fc-event.type-limited,
 .fc-event.type-limited .fc-daygrid-event-dot{
   background-color: #f08f8f;
   border-color: #f08f8f;
 }
-
+*/
 /* 하코 이벤트 */
 .fc-event.type-main,
 .fc-event.type-main .fc-daygrid-event-dot{
