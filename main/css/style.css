@@ -21,8 +21,7 @@ table.fc-scrollgrid{
 
 /* 상단 툴바 부분 design */
 .fc .fc-toolbar {
-  justify-content: flex-start;
-  gap: 50px;
+  gap: 20px;
   flex-direction: row-reverse;
 }
 
@@ -96,7 +95,7 @@ table.fc-scrollgrid{
 
 /* 과거 날짜 안의 이벤트 바 흐리게 */
 .fc-daygrid-day.fc-day-past .fc-event {
-  /* opacity: 0.5; */
+  /* opacity: 0.7; */
 }
 
 /* 이벤트바 수정 */
@@ -146,6 +145,7 @@ table.fc-scrollgrid{
   font-weight: bold;
 }
 
+/*오늘날짜 보더는 일단 주석처리*/
 div.today-border{
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -153,16 +153,26 @@ div.today-border{
   /* border-radius: 6px; */
   margin: -1px;
 
-  background:
-    linear-gradient(white, white) padding-box,
+  /* background:
     linear-gradient(45deg, #1db8ff, #fd61e7) border-box;
-  /* -webkit-mask:
+  -webkit-mask:
     linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0); */
-  /* -webkit-mask-composite: xor;
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
           mask-composite: exclude; */
 
   pointer-events: none;
+}
+
+.fc-day-today .fc-daygrid-day-number span{
+  display:block;
+  margin: 0 auto;
+  border-radius: 50%;
+  color:white;
+  background-color:#222;
+  width:25px;
+  height:25px;
+
 }
 /* 오늘날짜 강조 끝 */
 

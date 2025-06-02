@@ -14,6 +14,12 @@
   border-color:  #7fb0d7;
 }
 
+.fc-event.type-pt,
+.fc-event.type-pt .fc-daygrid-event-dot{
+  background-color: none;
+  background-image: linear-gradient(135deg, #da64f7, #2ca5f1, #5ce4d4);
+}
+
 /*
 .fc-event.type-cafe,
 .fc-event.type-cafe .fc-daygrid-event-dot{
@@ -21,18 +27,13 @@
   border-color: #cfa883;
 }
 
-
-.fc-event.type-pt {
-  background-image: linear-gradient(135deg, #da64f7, #2ca5f1, #5ce4d4);
-}
-
-
 .fc-event.type-limited,
 .fc-event.type-limited .fc-daygrid-event-dot{
   background-color: #f08f8f;
   border-color: #f08f8f;
 }
 */
+
 /* 하코 이벤트 */
 .fc-event.type-main,
 .fc-event.type-main .fc-daygrid-event-dot{
