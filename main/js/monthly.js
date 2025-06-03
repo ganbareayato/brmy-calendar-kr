@@ -35,7 +35,10 @@ document.addEventListener('DOMContentLoaded', async function () {
   
         const img = document.createElement('img');
         img.classList.add('bd-char-img')
-        img.src = `/main/img/sd/${charname}.png`;
+        
+        if (location.hostname === 'ganbareayato.github.io') img.src = `/brmy-calendar-kr/main/img/sd/${charname}.png`;
+        else img.src = `/main/img/sd/${charname}.png`;
+        
         arg.el.closest('div').appendChild(img);
         // arg.el.style.display = 'none';
       }
