@@ -5,11 +5,6 @@ body {
   color: #333;
 }
 
-#calendar {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
 table.fc-scrollgrid{
   border:0;
 }
