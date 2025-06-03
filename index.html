@@ -9,17 +9,27 @@
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.css" rel="stylesheet" />
 
   <!-- 사용자 정의 스타일 -->
-  <link href="./main/css/style.css" rel="stylesheet" />
+  <link href="./main/css/monthly.css" rel="stylesheet" />
   <link href="./main/css/bar_color.css" rel="stylesheet" />
   
 </head>
 <body>
-  <div id="calendar"></div>
+  <div id="wrapper">
+    <div id="today">
+      <h3>현재 진행 중인 이벤트</h3>
+      <div class="current-event"></div>
+      <h3>이번 달 생일</h3>
+      <div class="this-month-bd"></div>
+    </div>
+    <div id="calendar"></div>
+  </div>
 
   <!-- FullCalendar JS (v6.1.17) -->
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
 
   <!-- 사용자 정의 스크립트 -->
   <script type="module" src="./main/js/calendar.js"></script>
+  <script type="module" src="./main/js/monthly.js"></script>
+  <script type="module" src="./main/js/today.js"></script>
 </body>
 </html>

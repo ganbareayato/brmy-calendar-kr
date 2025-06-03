@@ -195,3 +195,26 @@ div.today-border{
   padding-left: 7px; /* 바 두께 + 여백 */
 }
 /* 단일이벤트 도트 양식 수정 끝 */
+
+/* 생일 이벤트 캐릭터 sd*/
+img.bd-char-img{
+  width:38px;
+  position:absolute;
+  bottom:-1px;
+  /* left:-5px; */
+  z-index:10;
+}
+
+.fc-event.fc-event-start.type-bd .fc-event-title.fc-sticky{
+  padding-left:34px;
+}
+
+/* 생일 이벤트 sd 캐릭터 끝 */
+
+/* 가챠 종료만 두줄표시 */
+.fc-event.gacha-point .fc-event-title{
+  width:3rem;
+  overflow-wrap: break-word;
+  word-break: keep-all;
+  -webkit-line-clamp: 2;
+}
