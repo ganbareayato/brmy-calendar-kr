@@ -1,0 +1,66 @@
+img.placeholder-img,
+img.banner-img{
+    width: 100%;
+}
+
+h3.title{
+    text-align: center;
+}
+
+/* div.timer-wrap{
+  border:1px solid;
+} */
+
+.remaining-time {
+  text-align: center; /* 중앙 정렬 */
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.remaining-time .subtitle {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+}
+
+.remaining-time .countdown {
+  display: flex;
+  justify-content: center; /* 가로로 나열 + 중앙정렬 */
+  background-color: rgb(244, 244, 244);
+  border-radius: 20px;
+  padding:10px;
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); */
+}
+
+.time-block{
+  flex: 1; /* 각 time-block 너비 동일! */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative; /* 가상요소 위치 기준 */
+}
+
+.time-block:not(:last-child){
+  vertical-align: middle;
+}
+
+.remaining-time div.value{
+  position: relative;
+  font-size: 2.7rem;
+  font-weight: 700;
+  color:#444;
+}
+
+.time-block:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 20%;
+  bottom: 35%;
+  right: 0;
+  width: 1px;
+  background-color: #333;
+}
+
+.remaining-time div.label{
+    font-size: 0.8rem;
+}

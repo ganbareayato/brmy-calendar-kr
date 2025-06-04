@@ -24,7 +24,7 @@ async function loadCharList() {
     const res = await fetch(jsonUrl);
     charList = await res.json();
   } catch (err) {
-    console.error('카드 리스트 불러오기 실패:', err);
+    console.error('캐릭터 리스트 불러오기 실패:', err);
   }
 }
 
@@ -72,6 +72,7 @@ async function loadEvents() {
         }
 
         return {
+          id: ev.id,
           title: ev.event_name,
           start: ev.date_start,
           end: ev.date_end,
@@ -103,7 +104,7 @@ function splitEventByPhases(ev) {
   const result = [];
 
   const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  // const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   const start = new Date(ev.start);
   const end = new Date(ev.end);

@@ -11,18 +11,58 @@
   <!-- 사용자 정의 스타일 -->
   <link href="./main/css/style.css" rel="stylesheet" />
   <link href="./main/css/monthly.css" rel="stylesheet" />
+  <link href="./main/css/today.css" rel="stylesheet" />
   <link href="./main/css/bar_color.css" rel="stylesheet" />
   
 </head>
 <body>
   <div id="wrapper">
     <div id="today">
-      <h3>현재 진행 중인 이벤트</h3>
-      <div class="current-event"></div>
-      <h3>이번 달 생일</h3>
-      <div class="this-month-bd"></div>
+      <div class="current-event">
+        <h2>현재 진행 중인 이벤트</h2>
+          <template class="current-event">
+            <div class="timer-wrap">
+              <img src="https://placehold.co/1280x720?text=COMING+SOON" class="placeholder-img" />
+              <h3 class="title">타이틀 중앙정렬</h3>
+              <div class="remaining-time">
+                <span class="subtitle"></span>
+                <div class="countdown">
+                  <div class="time-block days">
+                    <div class="value"></div>
+                    <div class="label">일</div>
+                  </div>
+                  <div class="time-block hours">
+                    <div class="value"></div>
+                    <div class="label">시</div>
+                  </div>
+                  <div class="time-block minutes">
+                    <div class="value"></div>
+                    <div class="label">분</div>
+                  </div>
+                  <div class="time-block seconds">
+                    <div class="value"></div>
+                    <div class="label">초</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+      </div>
+      <div class="bd-char">
+        <h2>이번 달 생일</h2>
+        <template class="bd-char">
+          <div class="dday-wrap">
+            <div class="name"></div>
+            <div class="dday">
+              <div class="birthday"></div>
+              <div class="value"></div>
+            </div>
+          </div>
+        </template>
+      </div>
+      <h2>이번 달 달력</h2>
+      <div id="calendar"></div>
     </div>
-    <div id="calendar"></div>
   </div>
 
   <!-- FullCalendar JS (v6.1.17) -->

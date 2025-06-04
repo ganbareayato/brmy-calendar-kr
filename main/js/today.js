@@ -1,5 +1,21 @@
 import { loadEvents } from './calendar.js';
 
+// today 부분에만 배너이미지 불러오면 될 것 같아서 today 쪽에 넣음
+async function loadBannerImg(evId) {
+  try {
+    const jsonUrl =
+      window.location.hostname === 'ganbareayato.github.io'
+        ? 'https://json-loader.ganbato-staff.workers.dev/load?file=event_img.json'
+        : './event_img.json';
+
+    const res = await fetch(jsonUrl);
+    const imgList = await res.json();
+    return imgList.find(img => img.event_id === evId && img.order === 1);
+  } catch (err) {
+    console.error('캐릭터 리스트 불러오기 실패:', err);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async function () {  
   const eventList = await loadEvents();
   const todayEl = document.getElementById('today');
@@ -8,7 +24,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
 
-  // 이번 달 데이터만
   // 이번 달에 걸쳐 있는 이벤트 필터링
   const thisMonthStart = new Date(currentYear, currentMonth, 1, 0, 0, 0);
   const thisMonthEnd = new Date(currentYear, currentMonth + 1, 0, 23, 59, 59);
@@ -34,31 +49,65 @@ document.addEventListener('DOMContentLoaded', async function () {
     return isThisMonth && notEndedYet;
   });
 
-  // 2️⃣ 남은시간 표시용 HTML
-  thisMonthEvents.forEach(ev => {
+  // 이벤트 이미지 및 남은 시간 표시
+  thisMonthEvents.forEach(async (ev, idx) => {
+    const template = document.querySelector('template.current-event');
+    const clone = template.content.cloneNode('true');
+    
+    //이벤트 이미지 추가(존재할경우)
+    const bannerImg = await loadBannerImg(ev.id);
+    if(bannerImg){
+      clone.querySelector('img').src = `https://lh3.googleusercontent.com/d/${bannerImg.img_id}`;
+      clone.querySelector('img').classList.remove('placeholder-img')
+      clone.querySelector('img').classList.add('banner-img')
+    }
+    
     const end = new Date(ev.end);
     const gachaEnd = ev.end_gacha ? new Date(ev.end_gacha) : end;
-    const eventDiv = document.createElement('div');
+    clone.querySelector('h3.title').textContent = ev.title;
+    clone.querySelector('div.timer-wrap').classList.add(`event-${idx}`);
+    document.querySelector('div.current-event').appendChild(clone);
+    
+    function updateCountdown(){
+      const today = new Date();
+      const timerWrap = document.querySelector(`.timer-wrap.event-${idx} .remaining-time`);
+      let getTime;
+      
+      //오늘보다 종료날짜가 이후(이벤트 현재 진행 중)
+      if(today < end){
+        getTime = getRemainingTime(end);
+        timerWrap.querySelector('span.subtitle').textContent = "이벤트 종료까지";
+      }
+      //오늘보다 종료날짜가 이전(이벤트끝) && 오늘보다 가챠날짜가 이후(가챠진행중)
+      else if(today > end && today < gachaEnd){
+        getTime = getRemainingTime(gachaEnd);
+        timerWrap.querySelector('span.subtitle').textContent = "가챠 종료까지";
+      }
 
-    eventDiv.innerHTML = `
-      <div>${ev.title} <br>이벤트 종료 <span class="event-end"></span></div>
-      <div>${ev.title} <br>가챠 종료 <span class="gacha-end"></span></div>
-    `;
-    console.log(eventDiv)
-    todayEl.querySelector('div.current-event').appendChild(eventDiv);
+      //getTime이 undefined(가능성 거의없지만) 보호용
+      if(getTime){
+        timerWrap.querySelector('.days .value').textContent = getTime.days;
+        timerWrap.querySelector('.hours .value').textContent = getTime.hours;
+        timerWrap.querySelector('.minutes .value').textContent = getTime.minutes;
+        timerWrap.querySelector('.seconds .value').textContent = getTime.seconds;
+      }
 
-    // 남은시간 갱신
-    setInterval(() => {
-      eventDiv.querySelector('.event-end').textContent = getRemainingTime(end);
-      eventDiv.querySelector('.gacha-end').textContent = getRemainingTime(gachaEnd);
-    }, 1000);
+      requestAnimationFrame(updateCountdown);
+    }
+    updateCountdown();
   });
 
-  // 3️⃣ 이번 달 생일
-  if (thisMonthBirthdays.length > 0) {
-    const bdList = thisMonthBirthdays.map(ev => `<div>${ev.title} ${new Date(ev.start).getDate()}일</div>`).join('');
-    todayEl.querySelector('div.this-month-bd').insertAdjacentHTML('beforeend', `${bdList.replace(' 생일 가챠', '')}`);
-  }
+  // 이번 달 생일
+  // if (thisMonthBirthdays.length > 0) {
+  //   thisMonthBirthdays.forEach(ev => {
+  //     const template = document.querySelector('template.bd-char');
+  //     const clone = template.content.cloneNode('true');
+      
+      
+  //   })
+  //   const bdList = thisMonthBirthdays.map(ev => `<div>${ev.title} ${new Date(ev.start).getDate()}일</div>`).join('');
+  //   todayEl.querySelector('div.this-month-bd').insertAdjacentHTML('beforeend', `${bdList.replace(' 생일 가챠', '')}`);
+  // }
 });
 
 function getRemainingTime(endDateTime) {
@@ -72,9 +121,15 @@ function getRemainingTime(endDateTime) {
   const seconds = diffSec % 60;
   
   // 두 자리 숫자 형식으로 맞춤 (padStart)
+  const daysStr = String(days).padStart(2, '0');
   const hoursStr = String(hours).padStart(2, '0');
   const minutesStr = String(minutes).padStart(2, '0');
   const secondsStr = String(seconds).padStart(2, '0');
-
-  return `${days}일 ${hoursStr}:${minutesStr}:${secondsStr}`;
+  // return `${days}일 ${hoursStr}:${minutesStr}:${secondsStr}`;
+  return {
+    'days': daysStr,
+    'hours': hoursStr,
+    'minutes': minutesStr,
+    'seconds':secondsStr
+  };
 }
