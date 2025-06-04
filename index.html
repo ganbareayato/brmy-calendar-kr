@@ -7,7 +7,8 @@
 
   <!-- FullCalendar CSS (v6.1.17) -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.css" rel="stylesheet" />
-
+  <!-- 웹폰트 -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <!-- 사용자 정의 스타일 -->
   <link href="./main/css/style.css" rel="stylesheet" />
   <link href="./main/css/monthly.css" rel="stylesheet" />
@@ -21,7 +22,7 @@
       <div class="current-event">
         <h2>현재 진행 중인 이벤트</h2>
           <template class="current-event">
-            <div class="timer-wrap">
+            <div class="card-wrap timer-wrap">
               <img src="https://placehold.co/1280x720?text=COMING+SOON" class="placeholder-img" />
               <h3 class="title">타이틀 중앙정렬</h3>
               <div class="remaining-time">
@@ -50,18 +51,23 @@
       </div>
       <div class="bd-char">
         <h2>이번 달 생일</h2>
-        <template class="bd-char">
-          <div class="dday-wrap">
-            <div class="name"></div>
-            <div class="dday">
-              <div class="birthday"></div>
-              <div class="value"></div>
+        <div class="bd-card-wrap">
+          <template class="bd-char">
+            <div class="card-wrap dday-wrap">
+              <div class="left">
+                <img>
+                <div class="info">
+                  <div class="name"></div>
+                  <div class="birthday"></div>
+                </div>
+              </div>
+              <div class="dday"></div>
             </div>
-          </div>
-        </template>
+          </template>
+        </div>
       </div>
       <h2>이번 달 달력</h2>
-      <div id="calendar"></div>
+      <div id="calendar" class="card-wrap"></div>
     </div>
   </div>
 

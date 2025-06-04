@@ -1,4 +1,4 @@
-import { loadEvents } from './calendar.js';
+import { charList, loadEvents } from './calendar.js';
 
 // today 부분에만 배너이미지 불러오면 될 것 같아서 today 쪽에 넣음
 async function loadBannerImg(evId) {
@@ -16,9 +16,46 @@ async function loadBannerImg(evId) {
   }
 }
 
+function getBdMMDDByKst(bd){
+  const dateUTC = new Date(bd);
+
+  // +9시간 보정 (KST로 변환)
+  const kstTimestamp = dateUTC.getTime() + (9 * 60 * 60 * 1000);
+  const dateKST = new Date(kstTimestamp);
+
+  // MM-DD 형식으로 뽑기
+  const month = String(dateKST.getMonth() + 1).padStart(2, '0'); // getMonth()는 0부터 시작
+  const day = String(dateKST.getDate()).padStart(2, '0');
+
+  return `${month}-${day}`;
+}
+
+function getRemainingTime(endDateTime) {
+  const now = new Date();
+  const diffMs = endDateTime - now;
+  if (diffMs <= 0) return "종료됨";
+  const diffSec = Math.floor(diffMs / 1000);
+  const days = Math.floor(diffSec / (3600 * 24));
+  const hours = Math.floor((diffSec % (3600 * 24)) / 3600);
+  const minutes = Math.floor((diffSec % 3600) / 60);
+  const seconds = diffSec % 60;
+  
+  // 두 자리 숫자 형식으로 맞춤 (padStart)
+  const daysStr = String(days).padStart(2, '0');
+  const hoursStr = String(hours).padStart(2, '0');
+  const minutesStr = String(minutes).padStart(2, '0');
+  const secondsStr = String(seconds).padStart(2, '0');
+  // return `${days}일 ${hoursStr}:${minutesStr}:${secondsStr}`;
+  return {
+    'days': daysStr,
+    'hours': hoursStr,
+    'minutes': minutesStr,
+    'seconds':secondsStr
+  };
+}
+
 document.addEventListener('DOMContentLoaded', async function () {  
   const eventList = await loadEvents();
-  const todayEl = document.getElementById('today');
 
   const now = new Date();
   const currentMonth = now.getMonth();
@@ -65,12 +102,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     const end = new Date(ev.end);
     const gachaEnd = ev.end_gacha ? new Date(ev.end_gacha) : end;
     clone.querySelector('h3.title').textContent = ev.title;
-    clone.querySelector('div.timer-wrap').classList.add(`event-${idx}`);
+    clone.querySelector('div.timer-wrap').classList.add(`event-${idx+1}`);
     document.querySelector('div.current-event').appendChild(clone);
     
     function updateCountdown(){
       const today = new Date();
-      const timerWrap = document.querySelector(`.timer-wrap.event-${idx} .remaining-time`);
+      const timerWrap = document.querySelector(`.timer-wrap.event-${idx+1} .remaining-time`);
       let getTime;
       
       //오늘보다 종료날짜가 이후(이벤트 현재 진행 중)
@@ -98,38 +135,36 @@ document.addEventListener('DOMContentLoaded', async function () {
   });
 
   // 이번 달 생일
-  // if (thisMonthBirthdays.length > 0) {
-  //   thisMonthBirthdays.forEach(ev => {
-  //     const template = document.querySelector('template.bd-char');
-  //     const clone = template.content.cloneNode('true');
-      
-      
-  //   })
-  //   const bdList = thisMonthBirthdays.map(ev => `<div>${ev.title} ${new Date(ev.start).getDate()}일</div>`).join('');
-  //   todayEl.querySelector('div.this-month-bd').insertAdjacentHTML('beforeend', `${bdList.replace(' 생일 가챠', '')}`);
-  // }
-});
+  if (thisMonthBirthdays.length > 0) {
+    thisMonthBirthdays.forEach(ev => {
+      const template = document.querySelector('template.bd-char');
+      const clone = template.content.cloneNode('true');
 
-function getRemainingTime(endDateTime) {
-  const now = new Date();
-  const diffMs = endDateTime - now;
-  if (diffMs <= 0) return "종료됨";
-  const diffSec = Math.floor(diffMs / 1000);
-  const days = Math.floor(diffSec / (3600 * 24));
-  const hours = Math.floor((diffSec % (3600 * 24)) / 3600);
-  const minutes = Math.floor((diffSec % 3600) / 60);
-  const seconds = diffSec % 60;
-  
-  // 두 자리 숫자 형식으로 맞춤 (padStart)
-  const daysStr = String(days).padStart(2, '0');
-  const hoursStr = String(hours).padStart(2, '0');
-  const minutesStr = String(minutes).padStart(2, '0');
-  const secondsStr = String(seconds).padStart(2, '0');
-  // return `${days}일 ${hoursStr}:${minutesStr}:${secondsStr}`;
-  return {
-    'days': daysStr,
-    'hours': hoursStr,
-    'minutes': minutesStr,
-    'seconds':secondsStr
-  };
-}
+      const bdText = getBdMMDDByKst(ev.start);
+
+      const charname = Object.entries(charList).find(([name, info]) => info.birthday === bdText);
+      const sdImg = (location.hostname === 'ganbareayato.github.io')
+        ? `/brmy-calendar-kr/main/img/sd/${charname[0]}.png`
+        : `/main/img/sd/${charname[0]}.png`;
+      clone.querySelector('.dday-wrap img').src = sdImg;
+
+      clone.querySelector('.dday-wrap .name').innerHTML = `${ev.title.replace(' 생일 가챠', '')}`;
+      clone.querySelector('.dday-wrap .birthday').textContent = getBdMMDDByKst(new Date(ev.start));
+      clone.querySelector('.dday-wrap .dday').textContent = `${ev.start}`;
+
+      //dday 계산
+      const start = new Date(ev.start);
+      const now = new Date();
+
+      start.setHours(0, 0, 0, 0);
+      now.setHours(0, 0, 0, 0);
+
+      const diffMs = start - now;
+      const diffDays = diffMs / (1000 * 60 * 60 * 24);
+
+      clone.querySelector('.dday-wrap .dday').textContent = `D${diffDays * -1}`;
+
+      template.closest('div.bd-card-wrap').appendChild(clone);
+    })
+  }
+});

@@ -290,4 +290,4 @@ function splitEventByPhases(ev) {
   // return result;
 }
 
-export { loadEvents }
+export { charList, loadEvents }

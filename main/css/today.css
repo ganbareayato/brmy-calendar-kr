@@ -1,15 +1,18 @@
 img.placeholder-img,
 img.banner-img{
     width: 100%;
+    border-radius: 1rem;
 }
 
 h3.title{
     text-align: center;
 }
 
-/* div.timer-wrap{
-  border:1px solid;
-} */
+/* 현재 이벤트 타이머 */
+/* 바텀만 padding 좀더주려고 추가 */
+div.card-wrap.timer-wrap{
+  padding-bottom: 20px;
+}
 
 .remaining-time {
   text-align: center; /* 중앙 정렬 */
@@ -20,7 +23,7 @@ h3.title{
 .remaining-time .subtitle {
   display: block;
   margin-bottom: 4px;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 .remaining-time .countdown {
@@ -28,7 +31,9 @@ h3.title{
   justify-content: center; /* 가로로 나열 + 중앙정렬 */
   background-color: rgb(244, 244, 244);
   border-radius: 20px;
-  padding:10px;
+  width:90%;
+  margin:0 auto;
+  padding:5px 10px;
   /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); */
 }
 
@@ -63,4 +68,61 @@ h3.title{
 
 .remaining-time div.label{
     font-size: 0.8rem;
+}
+
+/* 생일 디자인 */
+
+/* div.bd-card-wrap{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+} */
+
+div.bd-card-wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(0, 420px));
+  justify-content: space-between;
+}
+
+div.card-wrap.dday-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom:8px;
+  background: #fff;
+}
+
+.dday-wrap .left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dday-wrap img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.dday-wrap .info {
+  display: flex;
+  gap: 0.4rem;
+  flex-direction: column;
+}
+
+.dday-wrap .name {
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+
+.dday-wrap .birthday {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.dday-wrap .dday {
+  font-size: 1.8rem;
+  color: #666;
+  font-weight: bold;
 }
