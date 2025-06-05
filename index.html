@@ -17,62 +17,64 @@
   
 </head>
 <body>
+  <!-- <button type="button" class="testBtn">테스트버튼</button> -->
   <div id="wrapper">
     <div id="today">
-      <div class="current-event">
-        <h2>현재 진행 중인 이벤트</h2>
-          <template class="current-event">
-            <div class="card-wrap timer-wrap">
-              <img src="https://placehold.co/1280x720?text=COMING+SOON" class="placeholder-img" />
-              <h3 class="title">타이틀 중앙정렬</h3>
-              <div class="remaining-time">
-                <span class="subtitle"></span>
-                <div class="countdown">
-                  <div class="time-block days">
-                    <div class="value"></div>
-                    <div class="label">일</div>
-                  </div>
-                  <div class="time-block hours">
-                    <div class="value"></div>
-                    <div class="label">시</div>
-                  </div>
-                  <div class="time-block minutes">
-                    <div class="value"></div>
-                    <div class="label">분</div>
-                  </div>
-                  <div class="time-block seconds">
-                    <div class="value"></div>
-                    <div class="label">초</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
-      </div>
+      <h2>현재 진행 중인 이벤트</h2>
+      <div class="current-event-wrap"></div>
       <div class="bd-char">
         <h2>이번 달 생일</h2>
-        <div class="bd-card-wrap">
-          <template class="bd-char">
-            <div class="card-wrap dday-wrap">
-              <div class="left">
-                <img>
-                <div class="info">
-                  <div class="name"></div>
-                  <div class="birthday"></div>
-                </div>
-              </div>
-              <div class="dday"></div>
-            </div>
-          </template>
-        </div>
+        <div class="bd-char-wrap"></div>
       </div>
       <h2>이번 달 달력</h2>
       <div id="calendar" class="card-wrap"></div>
     </div>
   </div>
 
+  <template id="current-event-template">
+    <div class="card-wrap timer-wrap">
+      <!-- <img src="https://placehold.co/1280x720?text=COMING+SOON" class="placeholder-img" /> -->
+      <h3 class="title">타이틀 중앙정렬</h3>
+      <div class="remaining-time">
+        <span class="subtitle"></span>
+        <div class="countdown">
+          <div class="time-block days">
+            <div class="value"></div>
+            <div class="label">일</div>
+          </div>
+          <div class="time-block hours">
+            <div class="value"></div>
+            <div class="label">시</div>
+          </div>
+          <div class="time-block minutes">
+            <div class="value"></div>
+            <div class="label">분</div>
+          </div>
+          <div class="time-block seconds">
+            <div class="value"></div>
+            <div class="label">초</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="bd-char-template">
+    <div class="card-wrap dday-wrap">
+      <div class="left">
+        <img>
+        <div class="info">
+          <div class="name"></div>
+          <div class="birthday"></div>
+        </div>
+      </div>
+      <div class="dday"></div>
+    </div>
+  </template>
+
   <!-- FullCalendar JS (v6.1.17) -->
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sinon@15.0.1/pkg/sinon.js"></script>
 
   <!-- 사용자 정의 스크립트 -->
   <script type="module" src="./main/js/calendar.js"></script>

@@ -29,14 +29,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     // 생일 당일날 캐릭터 sd 추가
     eventDidMount: function(arg){
       const evClassList = arg.el.classList;
-      if(evClassList.contains('type-bd') && evClassList.contains('fc-event-start')){
+      if(evClassList.contains('type-bd') && evClassList.contains('fc-event-start') && !evClassList.contains('hidden')){
         const char = Array.from(evClassList).find(c => c.startsWith('char-'));
         const charname = char ? char.replace('char-', '') : null;
   
         const img = document.createElement('img');
         img.classList.add('bd-char-img')
         
-        if (location.hostname === 'ganbareayato.github.io') img.src = `/brmy-calendar-kr/main/img/sd/${charname}.png`;
+        if (location.hostname === 'ganbareayato.github.io')
+          img.src = `/brmy-calendar-kr/main/img/sd/${charname}.png`;
         else img.src = `/main/img/sd/${charname}.png`;
         
         arg.el.closest('div').appendChild(img);

@@ -12,6 +12,7 @@ body{
 div.card-wrap{
   background-color: white;
   padding:8px;
+  margin-bottom:12px;
   border-radius: 1.5rem;
   box-shadow: 0 3px 20px rgba(99, 99, 99, 0.1);
 }
@@ -19,4 +20,8 @@ div.card-wrap{
 h2{
   padding-left: 8px;
   padding-top: 20px;
+}
+
+.hidden{
+  display: none !important;
 }

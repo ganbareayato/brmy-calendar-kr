@@ -171,15 +171,32 @@ function splitEventByPhases(ev) {
     //   });
     // }
     //수정: 미분리
+    const campaignStart = new Date(ev.start);
+    campaignStart.setDate(campaignStart.getDate() - 1)
+
+    //생일캠페인
+    result.push({
+      ...ev,
+      title: `${ev.title} 캠페인`,
+      start_campaign: campaignStart.toISOString(),
+      end_campaign: end.toISOString(),
+      allDay: false,
+      classNames: [...classNamesBase, 'bd-campaign', 'hidden']
+    });
+
+    //생일가챠
     result.push({
       ...ev,
       title: `${ev.title} 가챠`,
       start: start.toISOString(),
-      end: gachaEnd?.toISOString() ?? end.toISOString(),
+      end_campaign: end.toISOString(),
+      end: gachaEnd.toISOString(),
       allDay: false,
-      classNames: [...classNamesBase]
+      classNames: [...classNamesBase, 'bd-gacha']
     });
+
     return result;
+
   } else {
     result.push({
       ...ev,

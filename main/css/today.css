@@ -6,14 +6,11 @@ img.banner-img{
 
 h3.title{
     text-align: center;
+    margin-top:4px;
+    margin-bottom: 12px;
 }
 
 /* 현재 이벤트 타이머 */
-/* 바텀만 padding 좀더주려고 추가 */
-div.card-wrap.timer-wrap{
-  padding-bottom: 20px;
-}
-
 .remaining-time {
   text-align: center; /* 중앙 정렬 */
   max-width: 400px;
@@ -89,7 +86,7 @@ div.card-wrap.dday-wrap {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom:8px;
+  /* margin-bottom:8px; */
   background: #fff;
 }
 
@@ -126,3 +123,13 @@ div.card-wrap.dday-wrap {
   color: #666;
   font-weight: bold;
 }
+
+/* dday 글씨 컬러 style.setProperty한 값 가져오기 */
+.dday-wrap.bd-dday .dday{
+  color: var(--char-color);
+}
+
+.dday-wrap.bd-dday{
+  border:1px solid var(--char-color);
+}
+
