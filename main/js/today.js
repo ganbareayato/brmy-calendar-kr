@@ -1,7 +1,7 @@
 import { charList, loadEvents } from './calendar.js';
 
-//테스트용
-// const clock = sinon.useFakeTimers(new Date('2025-06-22T23:59:59'));
+// 테스트용
+// const clock = sinon.useFakeTimers(new Date('2025-06-23T14:59:59'));
 // document.querySelector('.testBtn').addEventListener('click', ()=> {
 //   sinon.clock.tick(1000); // 1초 앞으로
 // })
@@ -113,9 +113,10 @@ async function loadThisMonthData(){
 
     const start = new Date(ev.start);
     const end = new Date(ev.end);
-
+    
     const isThisMonth = start.getFullYear() === today.getFullYear() && start.getMonth() === today.getMonth();
-    const notEndedYet = end >= today;
+    const isSameMonth = end.getFullYear() === today.getFullYear() && end.getMonth() === today.getMonth();
+    const notEndedYet = isSameMonth || end >= today;
 
     return isThisMonth && notEndedYet;
   });
@@ -123,8 +124,17 @@ async function loadThisMonthData(){
   return {thisMonthEvents, thisMonthBirthdays};
 }
 
-function renderBirthdayCards(thisMonthBirthdays){
-  // 생일란 dday
+function renderBirthdayCards(thisMonthBirthdays, onlyUpdate = false){
+  const now = new Date();
+
+  // 전달 막날 -> 1일 넘길 때 dday 카드 삭제
+  const isFirstDay = now.getDate() === 1;
+  
+  if (isFirstDay && onlyUpdate) {
+    document.querySelector('.bd-char-wrap').innerHTML = '';
+  }
+  
+  // 생일란 dday 카드 생성
   if (thisMonthBirthdays.length > 0) {
     thisMonthBirthdays.forEach(ev => {
       if(!ev.classNames.includes('bd-campaign')){ //캠페인은 dday에 띄워주면 안되니까 if문처리
@@ -146,7 +156,6 @@ function renderBirthdayCards(thisMonthBirthdays){
         clone.querySelector('.dday-wrap').style.setProperty('--char-color', charname[1].color);
         //dday 계산
         const start = new Date(ev.start);
-        const now = new Date();
   
         start.setHours(0, 0, 0, 0);
         now.setHours(0, 0, 0, 0);
@@ -167,8 +176,29 @@ function renderBirthdayCards(thisMonthBirthdays){
         }
         
         const existCardWrap = document.querySelector(`div.bd-char-wrap .dday-wrap.event-${ev.id}`)
+
+        //카드를 삭제했으면 넘어간달 1일의 dday도 추가해줘야겟죠
+
+        // dday 카드 없으면 카드 추가
         if(!existCardWrap)
           document.querySelector('div.bd-char-wrap').appendChild(clone);
+        // 카드 있으면 D-day 갱신
+        if (existCardWrap && onlyUpdate) {
+          const ddayCard = document.querySelector(`div.bd-char-wrap .dday-wrap.event-${ev.id}`);
+          if(ddayCard){
+            if(diffDays === 0){
+              ddayCard.querySelector('.dday').textContent = `D-day`;
+              if(!ddayCard.classList.contains('bd-dday'))
+                ddayCard.classList.add('bd-dday')
+            } else {
+              let addPlus = '';
+              if( diffDays < 0 ) addPlus = '+';
+              ddayCard.querySelector('.dday').textContent = `D${addPlus}${diffDays * -1}`;
+              if(ddayCard.classList.contains('bd-dday'))
+                ddayCard.classList.remove('bd-dday');
+            }
+          }
+        }
       }
     })
   }
@@ -209,6 +239,7 @@ async function renderToday(thisMonthEvents){
     const now = new Date();
     const isEvent = start <= now && now < end;
     const isGacha = end <= now && now < gachaEnd;
+    const isBeforeEvent = start > now;
 
     //생일 캠페인/가챠 및 일반이벤트 조건에 맞을 때만 append(중복append 방지)
     const container = document.querySelector('div.current-event-wrap');
@@ -222,9 +253,9 @@ async function renderToday(thisMonthEvents){
         container.appendChild(clone);
       }
     } else{
-      const existCardWrap = document.querySelector(`.timer-wrap.event-${ev.id}`);
+      const existCardWrap = document.querySelector(`.timer-wrap.event-${ev.id}:not(.bd-campaign):not(.bd-gacha)`);
       //조건에 안 맞는 날짜면 appendChild 방지
-      if( !existCardWrap && (isEvent || isGacha) ){
+      if( !existCardWrap && (isEvent || isGacha || isBeforeEvent) ){
         container.appendChild(clone);
       }
     }
@@ -237,6 +268,7 @@ async function renderToday(thisMonthEvents){
       const now = new Date();
       const isEvent = start <= now && now < end;
       const isGacha = end <= now && now < gachaEnd;
+      const isBeforeEvent = start > now;
       let getTime;
       
       const isBdCampaign = ev.classNames.includes('bd-campaign');
@@ -247,27 +279,59 @@ async function renderToday(thisMonthEvents){
       if (watchTimes.includes(currentTimeStr) && lastRenderTime !== currentTimeStr) {
         const { thisMonthEvents, thisMonthBirthdays } = await loadThisMonthData(); // 새로 로드!
         renderToday(thisMonthEvents);
-        if(currentTimeStr == "00:00") renderBirthdayCards(thisMonthBirthdays); //디데이카드는 00시에만 로드
+        if(currentTimeStr == "00:00"){
+          renderBirthdayCards(thisMonthBirthdays, true); //디데이카드는 00시에만 로드
+          // 월 넘어갔을 때 00시 00분에 달력 넘김
+          if (now.getDate() === 1 && now.getHours() === 0 && now.getMinutes() === 0) {
+            const todayButton = document.querySelector('.fc-today-button');
+            if (todayButton) todayButton.click();
+          }
+        }
         lastRenderTime = currentTimeStr;
+
       }
       
-      if( isEvent||isGacha ){
-        const timerWrap = document.querySelector(`.timer-wrap.event-${ev.id} .remaining-time`);
+      if( isBeforeEvent || isEvent||isGacha ){
+        let timerWrap;
+        if(isBdCampaign)
+          timerWrap = document.querySelector(`.timer-wrap.event-${ev.id}.bd-campaign .remaining-time`);
+        else if(isBdGacha)
+          timerWrap = document.querySelector(`.timer-wrap.event-${ev.id}.bd-gacha .remaining-time`);
+        else
+          timerWrap = document.querySelector(`.timer-wrap.event-${ev.id} .remaining-time`);
+                
         const subtitle = timerWrap?.querySelector('span.subtitle');
         //이벤트가 생일일 경우 로직
         if(isBd){
           if(isBdCampaign && isEvent){
             getTime = getRemainingTime(end);
-            subtitle.textContent = "생일 캠페인 종료까지";
-          } else if (isBdGacha && isEvent) {
+            if(subtitle)
+              subtitle.textContent = "생일 캠페인 종료까지";
+          } else if (isBdGacha && (isEvent || isGacha)) {
             getTime = getRemainingTime(gachaEnd);
-            subtitle.textContent = "생일 가챠 종료까지";
+            if(subtitle)
+              subtitle.textContent = "생일 가챠 종료까지";
+          }
+          if (!isEvent && isGacha) {
+            // 캠페인 끝, 가챠만 진행 중
+            const campaignCard = document.querySelector(`.timer-wrap.event-${ev.id}.bd-campaign`);
+            if (campaignCard) campaignCard.remove();
+          } else if(!isEvent && !isGacha) {
+            // 둘 다 끝난 경우
+            const gachaCard = document.querySelector(`.timer-wrap.event-${ev.id}.bd-gacha`);
+            if (gachaCard) gachaCard.remove();
           }
 
         //일반 이벤트 로직
         } else {
+          //이벤트 시작 예정일 때
+          if(isBeforeEvent){
+            getTime = getRemainingTime(start);
+            const startTime = getFormattedDateTime(start);
+            subtitle.textContent = `이벤트 시작까지: ${startTime}`;
+          }
           //시작날짜가 오늘보다 이전, 오늘보다 종료날짜가 이후(이벤트 현재 진행 중)
-          if(isEvent){
+          else if(isEvent){
             getTime = getRemainingTime(end);
             const endTime = getFormattedDateTime(end);
             subtitle.textContent = `이벤트 종료까지: ${endTime}`;

@@ -2,6 +2,3 @@ event.json
 event_img.json
 card_list.json
 characters.json
-node_modules/
-package-lock.json
-package.json
