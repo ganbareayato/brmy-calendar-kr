@@ -15,9 +15,11 @@ h3.title{
   text-align: center; /* 중앙 정렬 */
   max-width: 400px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
-.remaining-time .subtitle {
+.remaining-time span {
   display: block;
   margin-bottom: 4px;
   font-size: 0.8rem;
@@ -29,7 +31,7 @@ h3.title{
   background-color: rgb(244, 244, 244);
   border-radius: 20px;
   width:90%;
-  margin:0 auto;
+  margin:2px auto 6px auto;
   padding:5px 10px;
   /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); */
 }

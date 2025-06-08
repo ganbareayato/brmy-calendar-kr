@@ -1,7 +1,7 @@
 import { charList, loadEvents } from './calendar.js';
 
 // 테스트용
-// const clock = sinon.useFakeTimers(new Date('2025-06-23T14:59:59'));
+// const clock = sinon.useFakeTimers(new Date('2025-06-30T23:59:59'));
 // document.querySelector('.testBtn').addEventListener('click', ()=> {
 //   sinon.clock.tick(1000); // 1초 앞으로
 // })
@@ -65,8 +65,10 @@ function getRemainingTime(endDateTime) {
   };
 }
 
-function getFormattedDateTime(time) {
+function getFormattedDateTime(time, setSec = false) {
   const date = new Date(time);
+  if(setSec)
+    date.setSeconds(date.getSeconds() - 1);
 
   const yyyy = date.getFullYear();
   const mm = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0~11
@@ -177,8 +179,6 @@ function renderBirthdayCards(thisMonthBirthdays, onlyUpdate = false){
         
         const existCardWrap = document.querySelector(`div.bd-char-wrap .dday-wrap.event-${ev.id}`)
 
-        //카드를 삭제했으면 넘어간달 1일의 dday도 추가해줘야겟죠
-
         // dday 카드 없으면 카드 추가
         if(!existCardWrap)
           document.querySelector('div.bd-char-wrap').appendChild(clone);
@@ -207,8 +207,8 @@ function renderBirthdayCards(thisMonthBirthdays, onlyUpdate = false){
 // 이벤트 이미지 및 남은 시간 표시
 async function renderToday(thisMonthEvents){
   thisMonthEvents.forEach(async (ev) => {
+    
     const isBd = ev.subtype.includes('bd');
-
     const template = document.querySelector('#current-event-template');
     const clone = template.content.cloneNode('true');
     
@@ -225,54 +225,52 @@ async function renderToday(thisMonthEvents){
     const start = ev.start_campaign ? new Date(ev.start_campaign) : new Date(ev.start);
     const end = ev.end_campaign ? new Date(ev.end_campaign) : new Date(ev.end);
     const gachaEnd = ev.end_gacha ? new Date(ev.end_gacha) : end;
+
     clone.querySelector('h3.title').textContent = ev.title;
     clone.querySelector('div.timer-wrap').classList.add(`event-${ev.id}`);
-    if(ev.subtype){
-      let typeClass = '';
-      if(ev.classNames.includes('bd-campaign')) typeClass = "bd-campaign";
-      else if(ev.classNames.includes('bd-gacha')) typeClass = "bd-gacha";
+    // if(ev.subtype){
+    //   let typeClass = '';
+    //   if(ev.classNames.includes('bd-campaign')) typeClass = "bd-campaign";
+    //   else if(ev.classNames.includes('bd-gacha')) typeClass = "bd-gacha";
 
-      if(typeClass) 
-        clone.querySelector('div.timer-wrap').classList.add(typeClass);
-    }
+    //   if(typeClass) 
+    //     clone.querySelector('div.timer-wrap').classList.add(typeClass);
+    // }
         
     const now = new Date();
+    const isBeforeEvent = !isBd && (start > now);
     const isEvent = start <= now && now < end;
     const isGacha = end <= now && now < gachaEnd;
-    const isBeforeEvent = start > now;
 
     //생일 캠페인/가챠 및 일반이벤트 조건에 맞을 때만 append(중복append 방지)
     const container = document.querySelector('div.current-event-wrap');
-    if(isBd){
-      const existCampaignCard = document.querySelector(`.timer-wrap.event-${ev.id}.bd-campaign`);
-      const existGachaCard = document.querySelector(`.timer-wrap.event-${ev.id}.bd-gacha`);
+    const existCardWrap = document.querySelector(`.timer-wrap.event-${ev.id}`);
+    if (!existCardWrap && (isBeforeEvent || isEvent || isGacha))
+      container.appendChild(clone);
 
-      if (ev.classNames.includes('bd-campaign') && !existCampaignCard && (isEvent || isGacha)) {
-        container.appendChild(clone);
-      } else if (ev.classNames.includes('bd-gacha') && !existGachaCard && (isEvent || isGacha)) {
-        container.appendChild(clone);
+    const subtitleEvent = container.querySelector(`.timer-wrap.event-${ev.id} span.subtitle-event`);
+    const subtitleGacha = container.querySelector(`.timer-wrap.event-${ev.id} span.subtitle-gacha`);
+    if(subtitleEvent || subtitleGacha){
+      if(isBd){
+        subtitleEvent.textContent = `캠페인 종료: ${getFormattedDateTime(end, true)}`;
+        subtitleGacha.textContent = `가챠 종료: ${getFormattedDateTime(gachaEnd, true)}`;
       }
-    } else{
-      const existCardWrap = document.querySelector(`.timer-wrap.event-${ev.id}:not(.bd-campaign):not(.bd-gacha)`);
-      //조건에 안 맞는 날짜면 appendChild 방지
-      if( !existCardWrap && (isEvent || isGacha || isBeforeEvent) ){
-        container.appendChild(clone);
+      else{
+        subtitleEvent.textContent = `이벤트 종료: ${getFormattedDateTime(end)}`;
+        subtitleGacha.textContent = `가챠 종료: ${getFormattedDateTime(gachaEnd)}`;
       }
     }
-    
+  
 
     // ----------------------------- 카운트다운 함수 위치 ----------------------------- //
 
     async function updateCountdown(){
       // 카운트다운 내부에서 다시 now 및 조건문 선언(이벤트 카드바 실시간 교체)
       const now = new Date();
+      const isBeforeEvent = start > now;
       const isEvent = start <= now && now < end;
       const isGacha = end <= now && now < gachaEnd;
-      const isBeforeEvent = start > now;
       let getTime;
-      
-      const isBdCampaign = ev.classNames.includes('bd-campaign');
-      const isBdGacha = ev.classNames.includes('bd-gacha');
       
       // watchTimes 내부 시간 정시에 한번만 렌더링, watchTimes는 최상단선언
       const currentTimeStr = now.toTimeString().slice(0,5); // "HH:MM"
@@ -291,102 +289,65 @@ async function renderToday(thisMonthEvents){
 
       }
       
-      if( isBeforeEvent || isEvent||isGacha ){
-        let timerWrap;
-        if(isBdCampaign)
-          timerWrap = document.querySelector(`.timer-wrap.event-${ev.id}.bd-campaign .remaining-time`);
-        else if(isBdGacha)
-          timerWrap = document.querySelector(`.timer-wrap.event-${ev.id}.bd-gacha .remaining-time`);
-        else
-          timerWrap = document.querySelector(`.timer-wrap.event-${ev.id} .remaining-time`);
+      if( isBeforeEvent || isEvent || isGacha ){
+        const  timerWrap = document.querySelector(`.timer-wrap.event-${ev.id} .remaining-time`);
                 
-        const subtitle = timerWrap?.querySelector('span.subtitle');
         //이벤트가 생일일 경우 로직
+        const subtitleNow = timerWrap?.querySelector('span.subtitle-now');
+
         if(isBd){
-          if(isBdCampaign && isEvent){
+          if(isEvent){
+            if(subtitleNow)
+              subtitleNow.textContent = "생일 캠페인 종료까지";
             getTime = getRemainingTime(end);
-            if(subtitle)
-              subtitle.textContent = "생일 캠페인 종료까지";
-          } else if (isBdGacha && (isEvent || isGacha)) {
+          } else if (isGacha) {
+            if(subtitleNow)
+              subtitleNow.textContent = "가챠 종료까지";
+            if(subtitleEvent && !subtitleEvent.classList.contains('hidden'))
+              subtitleEvent.classList.add('hidden');
             getTime = getRemainingTime(gachaEnd);
-            if(subtitle)
-              subtitle.textContent = "생일 가챠 종료까지";
-          }
-          if (!isEvent && isGacha) {
-            // 캠페인 끝, 가챠만 진행 중
-            const campaignCard = document.querySelector(`.timer-wrap.event-${ev.id}.bd-campaign`);
-            if (campaignCard) campaignCard.remove();
-          } else if(!isEvent && !isGacha) {
-            // 둘 다 끝난 경우
-            const gachaCard = document.querySelector(`.timer-wrap.event-${ev.id}.bd-gacha`);
-            if (gachaCard) gachaCard.remove();
           }
 
         //일반 이벤트 로직
         } else {
-          //이벤트 시작 예정일 때
-          if(isBeforeEvent){
-            getTime = getRemainingTime(start);
-            const startTime = getFormattedDateTime(start);
-            subtitle.textContent = `이벤트 시작까지: ${startTime}`;
-          }
-          //시작날짜가 오늘보다 이전, 오늘보다 종료날짜가 이후(이벤트 현재 진행 중)
-          else if(isEvent){
-            getTime = getRemainingTime(end);
-            const endTime = getFormattedDateTime(end);
-            subtitle.textContent = `이벤트 종료까지: ${endTime}`;
-          }
-          //오늘보다 종료날짜가 이전(이벤트끝) && 오늘보다 가챠날짜가 이후(가챠진행중)
-          else if(isGacha){
-            getTime = getRemainingTime(gachaEnd);
-            const endTime = getFormattedDateTime(gachaEnd);
-            subtitle.textContent = `가챠 종료까지: ${endTime}`;
+          if(subtitleNow || subtitleEvent || subtitleGacha){
+            //이벤트 시작 예정일 때
+            if(isBeforeEvent){
+              getTime = getRemainingTime(start);
+              const startTime = getFormattedDateTime(start, false);
+              subtitleNow.textContent = `이벤트 시작까지: ${startTime}`;
+            }
+            //시작날짜가 오늘보다 이전, 오늘보다 종료날짜가 이후(이벤트 현재 진행 중)
+            else if(isEvent){
+              getTime = getRemainingTime(end);
+              subtitleNow.textContent = `이벤트 종료까지`;
+            }
+            //오늘보다 종료날짜가 이전(이벤트끝) && 오늘보다 가챠날짜가 이후(가챠진행중)
+            else if(isGacha){
+              getTime = getRemainingTime(gachaEnd);
+              subtitleNow.textContent = `가챠 종료까지`;
+              if(subtitleEvent && !subtitleEvent.classList.contains('hidden'))
+                subtitleEvent.classList.add('hidden');
+            }
           }
         }
   
         
         //getTime이 undefined(가능성 거의없지만) 보호용
         if(timerWrap && getTime){
-          const bdCampaignTimerWrap = document.querySelector(`.timer-wrap.event-${ev.id}.bd-campaign .remaining-time`);
-          const bdGachaTimerWrap = document.querySelector(`.timer-wrap.event-${ev.id}.bd-gacha .remaining-time`);
-          if(isBd){
-            if(isBdGacha && bdGachaTimerWrap){
-              bdGachaTimerWrap.querySelector('.days .value').textContent = getTime.days;
-              bdGachaTimerWrap.querySelector('.hours .value').textContent = getTime.hours;
-              bdGachaTimerWrap.querySelector('.minutes .value').textContent = getTime.minutes;
-              bdGachaTimerWrap.querySelector('.seconds .value').textContent = getTime.seconds;
-            } else if (isBdCampaign && bdCampaignTimerWrap) {
-              bdCampaignTimerWrap.querySelector('.days .value').textContent = getTime.days;
-              bdCampaignTimerWrap.querySelector('.hours .value').textContent = getTime.hours;
-              bdCampaignTimerWrap.querySelector('.minutes .value').textContent = getTime.minutes;
-              bdCampaignTimerWrap.querySelector('.seconds .value').textContent = getTime.seconds;
-            }
-          } else{
-            timerWrap.querySelector('.days .value').textContent = getTime.days;
-            timerWrap.querySelector('.hours .value').textContent = getTime.hours;
-            timerWrap.querySelector('.minutes .value').textContent = getTime.minutes;
-            timerWrap.querySelector('.seconds .value').textContent = getTime.seconds;
-          }
+          timerWrap.querySelector('.days .value').textContent = getTime.days;
+          timerWrap.querySelector('.hours .value').textContent = getTime.hours;
+          timerWrap.querySelector('.minutes .value').textContent = getTime.minutes;
+          timerWrap.querySelector('.seconds .value').textContent = getTime.seconds;
         }
   
       } else {
         //가챠날짜 이후 (이벤트, 가챠 모두 끝), 혹은 생일일 시 캠페인/가챠 처리
         const timerCard = document.querySelector(`.timer-wrap.event-${ev.id}`);
 
-        if(timerCard){
-          if(isBd){
-            const gachaCard = document.querySelector(`.timer-wrap.event-${ev.id}.bd-gacha`);
-            const campaignCard = document.querySelector(`.timer-wrap.event-${ev.id}.bd-campaign`);
-            // ev.classNames에 bd-gacha가 있을 때만 삭제
-            if (ev.classNames.includes('bd-gacha') && gachaCard) gachaCard.remove();
-
-            // ev.classNames에 bd-campaign이 있을 때만 삭제
-            if (ev.classNames.includes('bd-campaign') && campaignCard) campaignCard.remove();
-          }
-          else{
-            timerCard.remove();
-          }
-        }
+        if(timerCard)
+          timerCard.remove();
+        
       }
       requestAnimationFrame(updateCountdown);
     }
