@@ -1,11 +1,9 @@
 import { charList, loadEvents, cardList } from './calendar.js';
-
-
 // 테스트용
-const clock = sinon.useFakeTimers(new Date('2025-06-25T15:59:59'));
-document.querySelector('.testBtn').addEventListener('click', ()=> {
-  sinon.clock.tick(1000); // 1초 앞으로
-})
+// const clock = sinon.useFakeTimers(new Date('2025-06-25T15:59:59'));
+// document.querySelector('.testBtn').addEventListener('click', ()=> {
+//   sinon.clock.tick(1000); // 1초 앞으로
+// })
 
 
 //특정 시간마다 렌더링 체크용
