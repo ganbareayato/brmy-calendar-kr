@@ -230,7 +230,7 @@ async function renderToday(thisMonthEvents){
 
       clone.querySelector('div.card-wrap').prepend(img);
     }
-    
+        
     const start = ev.start_campaign ? new Date(ev.start_campaign) : new Date(ev.start);
     let end = ev.end_campaign ? new Date(ev.end_campaign) : new Date(ev.end);
     const gachaEnd = ev.end_gacha ? new Date(ev.end_gacha) : end;
@@ -294,7 +294,6 @@ async function renderToday(thisMonthEvents){
         }
       }
     }
-    await Promise.all(imagePromises)
     
 
     // ----------------------------- 카운트다운 함수 위치 ----------------------------- //
@@ -390,6 +389,8 @@ async function renderToday(thisMonthEvents){
     }
     updateCountdown();
   });
+
+  await Promise.all(imagePromises)
 }
 
 // document.addEventListener('DOMContentLoaded', async function () {
