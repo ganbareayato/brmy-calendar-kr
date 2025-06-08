@@ -1,4 +1,6 @@
 import { charList, loadEvents, cardList } from './calendar.js';
+import { loadMonth } from './monthly.js';
+
 
 // 테스트용
 // const clock = sinon.useFakeTimers(new Date('2025-06-10T15:59:59'));
@@ -205,7 +207,7 @@ function renderBirthdayCards(thisMonthBirthdays, onlyUpdate = false){
 }
 
 // 이벤트 이미지 및 남은 시간 표시
-async function renderToday(thisMonthEvents){
+async function renderToday(thisMonthEvents, thisMonthBirthdays){
    const imagePromises = [];
   thisMonthEvents.forEach(async (ev) => {
     const isBd = ev.subtype.includes('bd');
@@ -220,16 +222,24 @@ async function renderToday(thisMonthEvents){
       img.loading = "eager";
       img.classList.add('banner-img');
 
-      const p = new Promise(res => {
-        if (img.complete && img.naturalWidth !== 0) {
-          res();
-        } else {
-          img.onload = res;
-          img.onerror = res;
-        }
-      });
+      async function finishImgRender() {
+        renderBirthdayCards(thisMonthBirthdays);
+        await loadMonth();
+        document.querySelectorAll('.dummy-data').forEach(dummy => dummy.remove());
+        document.querySelector('.dummy-data-calendar').classList.remove('dummy-data-calendar');
+        document.body.classList.remove('loading-page');
+      }
       
-      imagePromises.push(p);
+      img.onload = finishImgRender;
+      img.onerror = finishImgRender;
+      // if (img.complete && img.naturalWidth !== 0) {
+      //   //이미지 로드 완료 시
+      //   console.log("이미지 로드 완료")
+      //   await finishImgRender();
+      //   document.body.classList.remove('loading-page');
+      // } else {
+      // }
+
       clone.querySelector('div.card-wrap').prepend(img);
     }
         
@@ -312,7 +322,7 @@ async function renderToday(thisMonthEvents){
       const currentTimeStr = now.toTimeString().slice(0,5); // "HH:MM"
       if (watchTimes.includes(currentTimeStr) && lastRenderTime !== currentTimeStr) {
         const { thisMonthEvents, thisMonthBirthdays } = await loadThisMonthData(); // 새로 로드!
-        await renderToday(thisMonthEvents);
+        await renderToday(thisMonthEvents, thisMonthBirthdays);
         if(currentTimeStr == "00:00"){
           renderBirthdayCards(thisMonthBirthdays, true); //디데이카드는 00시에만 로드
           // 월 넘어갔을 때 00시 00분에 달력 넘김
@@ -391,17 +401,11 @@ async function renderToday(thisMonthEvents){
     }
     updateCountdown();
   });
-   await Promise.all(imagePromises);
 }
-
-// document.addEventListener('DOMContentLoaded', async function () {
-//   await loadToday();
-// });
 
 export async function loadToday(){
   const { thisMonthEvents, thisMonthBirthdays } = await loadThisMonthData();
 
-  await renderToday(thisMonthEvents);
-  renderBirthdayCards(thisMonthBirthdays);
+  await renderToday(thisMonthEvents, thisMonthBirthdays);
 
 }

@@ -69,7 +69,7 @@
       </div>
     </div>
     <h2>달력</h2>
-    <div id="calendar" class="card-wrap"></div>
+    <div id="calendar" class="card-wrap dummy-data-calendar"></div>
   </div>
 
   <template id="current-event-template">
@@ -125,17 +125,11 @@
   <script type="module" src="./main/js/today.js"></script>
 
   <script type="module">
-    import { loadMonth } from './main/js/monthly.js';
     import { loadToday } from './main/js/today.js';
 
     async function initPage() {
       await loadToday();
-      await loadMonth();
-      
-      document.querySelectorAll('.dummy-data').forEach(dummy => {
-        dummy.remove();
-      })
-      document.body.classList.remove('loading-page')
+      // await loadMonth();
     }
 
     initPage();

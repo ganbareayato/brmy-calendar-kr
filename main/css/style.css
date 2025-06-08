@@ -59,6 +59,22 @@ h2{
   font-weight: 700;
 }
 
+div#calendar.dummy-data-calendar::before{
+  content: "loading...";
+  display: flex; /* flex를 써야 content를 중앙정렬할 수 있어 */
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  border-radius: 20px;
+  background-color: #dadada;
+  z-index: 10;
+  animation: pulse 1.4s infinite alternate;
+}
+
 @keyframes pulse {
   0% {
     background-color: #dadada;    /* 첫 번째 색상 */

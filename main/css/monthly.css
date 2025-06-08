@@ -4,6 +4,7 @@ table.fc-scrollgrid{
 
 #calendar{
   padding:12px;
+  position: relative;
 }
 
 .fc-header-toolbar{
