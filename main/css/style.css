@@ -36,6 +36,10 @@ h2{
   display: none !important;
 }
 
+.opacity-zero{
+  opacity: 0;
+}
+
 /* 페이지 로딩 */
 .dummy-data span.loading{
   position: relative;
