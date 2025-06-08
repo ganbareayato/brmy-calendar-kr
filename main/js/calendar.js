@@ -115,61 +115,6 @@ function splitEventByPhases(ev) {
 
   // 생일 시작일 단일이벤트 (모든 경우에 추가)
   if (isBD) {
-    // result.push({
-    //   ...ev,
-    //   title: `${ev.title}`,
-    //   start: start.toISOString(),
-    //   end: start.toISOString(),
-    //   allDay: false,
-    //   classNames: [...classNamesBase, 'bd-point']
-    // });
-    //기존 코드(오늘 기준으로 이벤트 걸쳐져 있을 경우 이벤트바 분리)
-    // if (gachaEnd < today) {
-    //   // 과거
-    //   result.push({
-    //     ...ev,
-    //     title: `${ev.title} 가챠`,
-    //     start: start.toISOString(),
-    //     end: gachaEnd?.toISOString() ?? end.toISOString(),
-    //     allDay: false,
-    //     classNames: [...classNamesBase, 'phase-past']
-    //   });
-    // } else if (start > today) {
-    //   // 미래
-    //   result.push({
-    //     ...ev,
-    //     title: `${ev.title} 가챠`,
-    //     start: start.toISOString(),
-    //     end: gachaEnd?.toISOString() ?? end.toISOString(),
-    //     allDay: false,
-    //     classNames: [...classNamesBase, 'phase-future']
-    //   });
-    // } else {
-    //   // 현재
-    //   const pastEnd = new Date(today);
-    //   pastEnd.setDate(today.getDate() - 1);
-    //   pastEnd.setHours(23, 59, 59, 999);
-      
-    //   if (start < today) {
-    //     result.push({
-    //       ...ev,
-    //       title: `${ev.title} 가챠`,
-    //       start: start.toISOString(),
-    //       end: pastEnd.toISOString(),
-    //       allDay: false,
-    //       classNames: [...classNamesBase, 'phase-past']
-    //     });
-    //   }
-  
-    //   result.push({
-    //     ...ev,
-    //     title: `${ev.title} 가챠`,
-    //     start: today.toISOString(),
-    //     end: gachaEnd?.toISOString() ?? end.toISOString(),
-    //     allDay: true,
-    //     classNames: [...classNamesBase, 'phase-current']
-    //   });
-    // }
     //수정: 미분리
     const campaignStart = new Date(ev.start);
     campaignStart.setDate(campaignStart.getDate() - 1)
@@ -192,7 +137,7 @@ function splitEventByPhases(ev) {
       end_campaign: end.toISOString(),
       end: gachaEnd.toISOString(),
       allDay: false,
-      classNames: [...classNamesBase, 'bd-gacha']
+      classNames: [...classNamesBase]
     });
 
     return result;
@@ -219,92 +164,6 @@ function splitEventByPhases(ev) {
 
     return result;
   }
-    
-  
-
-  // === 일반 이벤트 ===
-
-  // if (end < today) {
-  //   result.push({
-  //     ...ev,
-  //     start: start.toISOString(),
-  //     end: end.toISOString(),
-  //     allDay: false,
-  //     classNames: [...classNamesBase, 'phase-past']
-  //   });
-
-  //   if (gachaEnd && gachaEnd.getTime() !== end.getTime()) {
-  //     result.push({
-  //       ...ev,
-  //       title: `가챠 종료`,
-  //       start: gachaEnd.toISOString(),
-  //       end: gachaEnd.toISOString(),
-  //       allDay: false,
-  //       classNames: [...classNamesBase, 'gacha-point']
-  //     });
-  //   }
-
-  //   return result;
-  // }
-
-  // if (start > today) {
-  //   result.push({
-  //     ...ev,
-  //     start: start.toISOString(),
-  //     end: end.toISOString(),
-  //     allDay: false,
-  //     classNames: [...classNamesBase, 'phase-future']
-  //   });
-
-  //   if (gachaEnd && gachaEnd.getTime() !== end.getTime()) {
-  //     result.push({
-  //       ...ev,
-  //       title: `가챠 종료`,
-  //       start: gachaEnd.toISOString(),
-  //       end: gachaEnd.toISOString(),
-  //       allDay: false,
-  //       classNames: [...classNamesBase, 'gacha-point']
-  //     });
-  //   }
-
-  //   return result;
-  // }
-
-  // // 현재
-  // const pastEnd = new Date(today);
-  // pastEnd.setDate(today.getDate() - 1);
-  // pastEnd.setHours(23, 59, 59, 999);
-
-  // if (start < today) {
-  //   result.push({
-  //     ...ev,
-  //     start: start.toISOString(),
-  //     end: pastEnd.toISOString(),
-  //     allDay: false,
-  //     classNames: [...classNamesBase, 'phase-past']
-  //   });
-  // }
-
-  // result.push({
-  //   ...ev,
-  //   start: today.toISOString(),
-  //   end: end.toISOString(),
-  //   allDay: false,
-  //   classNames: [...classNamesBase, 'phase-current']
-  // });
-
-  // if (gachaEnd) {
-  //   result.push({
-  //     ...ev,
-  //     title: `가챠 종료`,
-  //     start: gachaEnd.toISOString(),
-  //     end: gachaEnd.toISOString(),
-  //     allDay: false,
-  //     classNames: [...classNamesBase, 'gacha-point']
-  //   });
-  // }
-
-  // return result;
 }
 
-export { charList, loadEvents }
+export { charList, loadEvents, cardList, loadCardList }

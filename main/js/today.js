@@ -1,7 +1,7 @@
-import { charList, loadEvents } from './calendar.js';
+import { charList, loadEvents, cardList, loadCardList } from './calendar.js';
 
 // 테스트용
-// const clock = sinon.useFakeTimers(new Date('2025-06-30T23:59:59'));
+// const clock = sinon.useFakeTimers(new Date('2025-06-10T15:59:59'));
 // document.querySelector('.testBtn').addEventListener('click', ()=> {
 //   sinon.clock.tick(1000); // 1초 앞으로
 // })
@@ -207,7 +207,6 @@ function renderBirthdayCards(thisMonthBirthdays, onlyUpdate = false){
 // 이벤트 이미지 및 남은 시간 표시
 async function renderToday(thisMonthEvents){
   thisMonthEvents.forEach(async (ev) => {
-    
     const isBd = ev.subtype.includes('bd');
     const template = document.querySelector('#current-event-template');
     const clone = template.content.cloneNode('true');
@@ -223,21 +222,14 @@ async function renderToday(thisMonthEvents){
     }
     
     const start = ev.start_campaign ? new Date(ev.start_campaign) : new Date(ev.start);
-    const end = ev.end_campaign ? new Date(ev.end_campaign) : new Date(ev.end);
+    let end = ev.end_campaign ? new Date(ev.end_campaign) : new Date(ev.end);
     const gachaEnd = ev.end_gacha ? new Date(ev.end_gacha) : end;
 
     clone.querySelector('h3.title').textContent = ev.title;
     clone.querySelector('div.timer-wrap').classList.add(`event-${ev.id}`);
-    // if(ev.subtype){
-    //   let typeClass = '';
-    //   if(ev.classNames.includes('bd-campaign')) typeClass = "bd-campaign";
-    //   else if(ev.classNames.includes('bd-gacha')) typeClass = "bd-gacha";
-
-    //   if(typeClass) 
-    //     clone.querySelector('div.timer-wrap').classList.add(typeClass);
-    // }
         
     const now = new Date();
+    // 생일은 이벤트 시작까지~ 붙여줄 이유 없으니까 그냥 아예 false 처리한것임
     const isBeforeEvent = !isBd && (start > now);
     const isEvent = start <= now && now < end;
     const isGacha = end <= now && now < gachaEnd;
@@ -260,6 +252,39 @@ async function renderToday(thisMonthEvents){
         subtitleGacha.textContent = `가챠 종료: ${getFormattedDateTime(gachaEnd)}`;
       }
     }
+
+    // 카페바 이벤트 시프트 계산 로직
+    const subtitleNow = container.querySelector(`.event-${ev.id} span.subtitle-now`);
+    let checkShiftDate = null;
+    if( ev.classNames.includes("type-cafe") && now < gachaEnd ){
+      subtitleNow.classList.add('subtitle-cafe')
+      const cafeCardList = cardList.filter(el => el['event_id'] === ev.id);
+      let cafeShift = {
+        1: cafeCardList.find(el => el['source'] === 'reward'),
+        2: cafeCardList.find(el => el['rarity'] === 'ssr' && el['order'] == 1),
+        3: cafeCardList.find(el => el['rarity'] === 'ssr' && el['order'] == 2),
+        4: cafeCardList.find(el => el['rarity'] === 'ssr' && el['order'] == 3),
+      }
+
+      for (const key in cafeShift){
+        cafeShift[key] = charList[cafeShift[key].char_id].name;
+      }
+
+      for(let i=1; i<=4; i++){
+        const checkShiftStart = new Date(start);
+        checkShiftStart.setDate( start.getDate() + (i*4) )
+        if(now < checkShiftStart){
+          subtitleNow.textContent = `${cafeShift[i]} 시프트 중・다음 시프트까지`
+          subtitleNow.classList.add('subtitle-cafe')
+          if(i==4) {
+            subtitleNow.textContent = `${cafeShift[i]} 시프트 중・이벤트 종료까지`
+          }
+          checkShiftDate = new Date(checkShiftStart)
+          break;
+        }
+      }
+    }
+
   
 
     // ----------------------------- 카운트다운 함수 위치 ----------------------------- //
@@ -319,7 +344,9 @@ async function renderToday(thisMonthEvents){
             }
             //시작날짜가 오늘보다 이전, 오늘보다 종료날짜가 이후(이벤트 현재 진행 중)
             else if(isEvent){
-              getTime = getRemainingTime(end);
+              if(checkShiftDate) getTime = getRemainingTime(checkShiftDate);
+              else getTime = getRemainingTime(end);
+              if(!subtitleNow.classList.contains('subtitle-cafe'))
               subtitleNow.textContent = `이벤트 종료까지`;
             }
             //오늘보다 종료날짜가 이전(이벤트끝) && 오늘보다 가챠날짜가 이후(가챠진행중)
