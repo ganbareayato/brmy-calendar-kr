@@ -206,6 +206,8 @@ function renderBirthdayCards(thisMonthBirthdays, onlyUpdate = false){
 
 // 이벤트 이미지 및 남은 시간 표시
 async function renderToday(thisMonthEvents){
+  // 이미지까지 Promise로 기다려주기!
+  const imagePromises = [];
   thisMonthEvents.forEach(async (ev) => {
     const isBd = ev.subtype.includes('bd');
     const template = document.querySelector('#current-event-template');
@@ -218,6 +220,13 @@ async function renderToday(thisMonthEvents){
       img.loading = "eager";
       img.src = `https://lh3.googleusercontent.com/d/${bannerImg.img_id}`;
       img.classList.add('banner-img');
+
+
+      const imgPromise = new Promise((resolve) => {
+        img.onload = resolve;
+        img.onerror = resolve; // 실패해도 넘어가기
+      });
+      imagePromises.push(imgPromise);
 
       clone.querySelector('div.card-wrap').prepend(img);
     }
@@ -285,8 +294,8 @@ async function renderToday(thisMonthEvents){
         }
       }
     }
-
-  
+    await Promise.all(imagePromises)
+    
 
     // ----------------------------- 카운트다운 함수 위치 ----------------------------- //
 
