@@ -1,12 +1,11 @@
 import { charList, loadEvents, cardList } from './calendar.js';
-import { loadMonth } from './monthly.js';
 
 
 // 테스트용
-// const clock = sinon.useFakeTimers(new Date('2025-06-10T15:59:59'));
-// document.querySelector('.testBtn').addEventListener('click', ()=> {
-//   sinon.clock.tick(1000); // 1초 앞으로
-// })
+const clock = sinon.useFakeTimers(new Date('2025-06-25T15:59:59'));
+document.querySelector('.testBtn').addEventListener('click', ()=> {
+  sinon.clock.tick(1000); // 1초 앞으로
+})
 
 
 //특정 시간마다 렌더링 체크용
@@ -207,42 +206,12 @@ function renderBirthdayCards(thisMonthBirthdays, onlyUpdate = false){
 }
 
 // 이벤트 이미지 및 남은 시간 표시
-async function renderToday(thisMonthEvents, thisMonthBirthdays){
-   const imagePromises = [];
+async function renderToday(thisMonthEvents){
   thisMonthEvents.forEach(async (ev) => {
     const isBd = ev.subtype.includes('bd');
     const template = document.querySelector('#current-event-template');
     const clone = template.content.cloneNode('true');
     
-    // 이벤트 이미지 추가(존재할경우)
-    const bannerImg = await loadBannerImg(ev.id);
-    if(bannerImg){
-      const img = new Image();
-      img.src = `https://lh3.googleusercontent.com/d/${bannerImg.img_id}`;
-      img.loading = "eager";
-      img.classList.add('banner-img');
-
-      async function finishImgRender() {
-        renderBirthdayCards(thisMonthBirthdays);
-        await loadMonth();
-        document.querySelectorAll('.dummy-data').forEach(dummy => dummy.remove());
-        document.querySelector('.dummy-data-calendar').classList.remove('dummy-data-calendar');
-        document.body.classList.remove('loading-page');
-      }
-      
-      img.onload = finishImgRender;
-      img.onerror = finishImgRender;
-      // if (img.complete && img.naturalWidth !== 0) {
-      //   //이미지 로드 완료 시
-      //   console.log("이미지 로드 완료")
-      //   await finishImgRender();
-      //   document.body.classList.remove('loading-page');
-      // } else {
-      // }
-
-      clone.querySelector('div.card-wrap').prepend(img);
-    }
-        
     const start = ev.start_campaign ? new Date(ev.start_campaign) : new Date(ev.start);
     let end = ev.end_campaign ? new Date(ev.end_campaign) : new Date(ev.end);
     const gachaEnd = ev.end_gacha ? new Date(ev.end_gacha) : end;
@@ -261,7 +230,7 @@ async function renderToday(thisMonthEvents, thisMonthBirthdays){
     const existCardWrap = document.querySelector(`.timer-wrap.event-${ev.id}`);
     if (!existCardWrap && (isBeforeEvent || isEvent || isGacha))
       container.appendChild(clone);
-
+        
     const subtitleEvent = container.querySelector(`.timer-wrap.event-${ev.id} span.subtitle-event`);
     const subtitleGacha = container.querySelector(`.timer-wrap.event-${ev.id} span.subtitle-gacha`);
     if(subtitleEvent || subtitleGacha){
@@ -400,12 +369,38 @@ async function renderToday(thisMonthEvents, thisMonthBirthdays){
       requestAnimationFrame(updateCountdown);
     }
     updateCountdown();
+
+    // 이벤트 이미지 추가(존재할경우)
+    const bannerImg = await loadBannerImg(ev.id);
+    if(bannerImg){
+      const imgWrap = container.querySelector(`.timer-wrap.event-${ev.id} div.imgWrap`);
+      if(imgWrap){
+        const img = imgWrap.querySelector(`img`);
+        if(img){
+          img.src = `https://lh3.googleusercontent.com/d/${bannerImg.img_id}`;
+          img.loading = "eager";
+          // img.classList.add('banner-img');
+          if(imgWrap.classList.contains('dummy-img'))
+            imgWrap.classList.remove('dummy-img');
+          if(img.classList.contains('placeholder-img'))
+            img.classList.remove('placeholder-img');
+        }
+      }
+    } else {
+      const imgWrap = container.querySelector(`.timer-wrap.event-${ev.id} div.imgWrap`);
+      imgWrap?.remove();
+    }
   });
 }
 
 export async function loadToday(){
   const { thisMonthEvents, thisMonthBirthdays } = await loadThisMonthData();
 
-  await renderToday(thisMonthEvents, thisMonthBirthdays);
+  renderToday(thisMonthEvents);
+  renderBirthdayCards(thisMonthBirthdays);
 
+
+  document.querySelectorAll('.dummy-data').forEach(dummy => dummy.remove());
+  document.querySelector('.dummy-data-calendar').classList.remove('dummy-data-calendar');
+  document.body.classList.remove('loading-page');
 }

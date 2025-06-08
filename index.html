@@ -17,7 +17,7 @@
   
 </head>
 <body class="loading-page">
-  <!-- <button type="button" class="testBtn">테스트버튼</button> -->
+  <button type="button" class="testBtn">테스트버튼</button>
   <div id="wrapper" class="loading">
     <div id="today">
       <h2>이벤트・가챠</h2>
@@ -74,7 +74,9 @@
 
   <template id="current-event-template">
     <div class="card-wrap timer-wrap">
-      <!-- <img src="https://placehold.co/1280x720?text=COMING+SOON" class="placeholder-img" /> -->
+      <div class="imgWrap dummy-img">
+        <img class="banner-img placeholder-img"/>
+      </div>
       <h3 class="title">타이틀 중앙정렬</h3>
       <div class="remaining-time">
         <span class="subtitle-now"></span>
@@ -126,10 +128,12 @@
 
   <script type="module">
     import { loadToday } from './main/js/today.js';
+    import { loadMonth } from './main/js/monthly.js';
 
     async function initPage() {
       await loadToday();
-      // await loadMonth();
+      await loadMonth();
+      // document.body.classList.remove('loading-page');
     }
 
     initPage();

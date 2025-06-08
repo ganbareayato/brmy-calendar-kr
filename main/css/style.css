@@ -59,6 +59,20 @@ h2{
   font-weight: 700;
 }
 
+
+div.imgWrap.dummy-img{
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #dadada;
+  animation: pulse 1.4s infinite alternate;
+  border-radius: 1rem;
+}
+
+img.placeholder-img{
+  display:none;
+}
+
+
 div#calendar.dummy-data-calendar::before{
   content: "loading...";
   display: flex; /* flex를 써야 content를 중앙정렬할 수 있어 */
