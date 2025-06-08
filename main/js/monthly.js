@@ -1,6 +1,5 @@
 import { loadEvents } from './calendar.js';
-
-document.addEventListener('DOMContentLoaded', async function () {  
+export async function loadMonth(){
   const calendarEl = document.getElementById('calendar');
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
@@ -68,4 +67,4 @@ document.addEventListener('DOMContentLoaded', async function () {
       calendar.prev();
     }
   });
-});
+}

@@ -17,6 +17,7 @@
   
 </head>
 <body>
+  <div id="loading"></div>
   <!-- <button type="button" class="testBtn">테스트버튼</button> -->
   <div id="wrapper">
     <div id="today">
@@ -82,5 +83,21 @@
   <script type="module" src="./main/js/calendar.js"></script>
   <script type="module" src="./main/js/monthly.js"></script>
   <script type="module" src="./main/js/today.js"></script>
+
+  <script type="module">
+    import { loadMonth } from './main/js/monthly.js';
+    import { loadToday } from './main/js/today.js';
+
+    async function initPage() {
+      const loading = document.getElementById('loading');
+      await loadMonth();
+      await loadToday();
+
+      loading.classList.add('hidden');
+      document.querySelector('#wrapper').classList.remove('hidden');
+    }
+
+    initPage();
+  </script>
 </body>
 </html>

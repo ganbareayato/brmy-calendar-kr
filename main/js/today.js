@@ -1,4 +1,4 @@
-import { charList, loadEvents, cardList, loadCardList } from './calendar.js';
+import { charList, loadEvents, cardList } from './calendar.js';
 
 // 테스트용
 // const clock = sinon.useFakeTimers(new Date('2025-06-10T15:59:59'));
@@ -382,9 +382,14 @@ async function renderToday(thisMonthEvents){
   });
 }
 
-document.addEventListener('DOMContentLoaded', async function () {
+// document.addEventListener('DOMContentLoaded', async function () {
+//   await loadToday();
+// });
+
+export async function loadToday(){
   const { thisMonthEvents, thisMonthBirthdays } = await loadThisMonthData();
 
   renderToday(thisMonthEvents);
   renderBirthdayCards(thisMonthBirthdays);
-});
+
+}
