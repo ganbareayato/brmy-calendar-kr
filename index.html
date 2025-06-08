@@ -16,16 +16,56 @@
   <link href="./main/css/bar_color.css" rel="stylesheet" />
   
 </head>
-<body>
-  <div id="loading"></div>
+<body class="loading-page">
   <!-- <button type="button" class="testBtn">테스트버튼</button> -->
-  <div id="wrapper">
+  <div id="wrapper" class="loading">
     <div id="today">
       <h2>이벤트・가챠</h2>
-      <div class="current-event-wrap"></div>
+      <div class="current-event-wrap">
+        <div class="card-wrap timer-wrap dummy-data">
+          <!-- <img src="https://placehold.co/1280x720?text=COMING+SOON" class="placeholder-img" /> -->
+          <h3 class="title"><span class="loading">이벤트명 이벤트명</span></h3>
+          <div class="remaining-time">
+            <span class="subtitle-now">이벤트 시작까지: <span class="loading">0000-00-00(일) 00:00</span></span>
+            <div class="countdown">
+              <div class="time-block days">
+                <div class="value"><span class="loading">00</span></div>
+                <div class="label">일</div>
+              </div>
+              <div class="time-block hours">
+                <div class="value"><span class="loading">00</span></div>
+                <div class="label">시</div>
+              </div>
+              <div class="time-block minutes">
+                <div class="value"><span class="loading">00</span></div>
+                <div class="label">분</div>
+              </div>
+              <div class="time-block seconds">
+                <div class="value"><span class="loading">00</span></div>
+                <div class="label">초</div>
+              </div>
+            </div>
+            <span class="subtitle-event">이벤트 종료: <span class="loading">0000-00-00(일) 00:00</span></span>
+            <span class="subtitle-gacha">가챠 종료: <span class="loading">0000-00-00(일) 00:00</span></span>
+          </div>
+        </div>
+
+      </div>
       <div class="bd-char">
         <h2>생일</h2>
-        <div class="bd-char-wrap"></div>
+        <div class="bd-char-wrap">
+          <div class="card-wrap dday-wrap dummy-data">
+            <div class="left">
+              <span class="loading" style="display: block; width: 60px; height:60px;">
+              </span>
+              <div class="info">
+                <div class="name"><span class="loading">캐릭터성 캐이름</span></div>
+                <div class="birthday"><span class="loading">00-00</span></div>
+              </div>
+            </div>
+            <div class="dday">D-<span class="loading">00</span></div>
+          </div>
+        </div>
       </div>
       <h2>달력</h2>
       <div id="calendar" class="card-wrap"></div>
@@ -89,12 +129,13 @@
     import { loadToday } from './main/js/today.js';
 
     async function initPage() {
-      const loading = document.getElementById('loading');
       await loadMonth();
       await loadToday();
-
-      loading.classList.add('hidden');
-      document.querySelector('#wrapper').classList.remove('hidden');
+      
+      document.querySelectorAll('.dummy-data').forEach(dummy => {
+        dummy.remove();
+      })
+      document.body.classList.remove('loading-page')      
     }
 
     initPage();

@@ -4,6 +4,15 @@ body{
   color:#333;
 }
 
+body.loading-page{
+  overflow:hidden;
+  height:100%;
+}
+
+body.loading-page div#calendar{
+  height:50vh;
+}
+
 #wrapper{
   max-width: 850px;
   margin: 0 auto;
@@ -28,12 +37,29 @@ h2{
 }
 
 /* 페이지 로딩 */
-#loading{
-  position:fixed;
-  left:0;
-  top:0;
-  width:100vw;
-  height:100vh;
-  z-index: 500;
-  background-color: rgba(0, 0, 0, 0.2);
+.dummy-data span.loading{
+  position: relative;
+  color: transparent; /* 데이터는 안 보이게 */
+  background-color: #dadada;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.dummy-data span.loading {
+  background-color: #dadada;       /* 첫 번째 색상 */
+  animation: pulse 1.4s infinite alternate;
+  border-radius: 4px;
+}
+
+.dummy-data .time-block div.value span.loading{
+  font-size: 2.7rem;
+  font-weight: 700;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #dadada;    /* 첫 번째 색상 */
+  }
+  100% {
+    background-color: #e9e9e9;    /* 두 번째 색상 */
+  }
 }

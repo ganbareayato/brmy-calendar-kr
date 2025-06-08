@@ -8,6 +8,7 @@ h3.title{
     text-align: center;
     margin-top:4px;
     margin-bottom: 12px;
+    font-size: 1.1rem;
 }
 
 /* 현재 이벤트 타이머 */
@@ -20,7 +21,7 @@ h3.title{
 }
 
 .remaining-time span {
-  display: block;
+  /* display: block; */
   margin-bottom: 4px;
   font-size: 0.8rem;
 }
