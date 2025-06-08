@@ -105,7 +105,7 @@
   <template id="bd-char-template">
     <div class="card-wrap dday-wrap">
       <div class="left">
-        <img>
+        <img loading="eager">
         <div class="info">
           <div class="name"></div>
           <div class="birthday"></div>
@@ -132,10 +132,10 @@
       await loadMonth();
       await loadToday();
       
-      document.querySelectorAll('.dummy-data').forEach(dummy => {
-        dummy.remove();
-      })
-      document.body.classList.remove('loading-page')      
+      // document.querySelectorAll('.dummy-data').forEach(dummy => {
+      //   dummy.remove();
+      // })
+      // document.body.classList.remove('loading-page')      
     }
 
     initPage();

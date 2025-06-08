@@ -215,6 +215,7 @@ async function renderToday(thisMonthEvents){
     const bannerImg = await loadBannerImg(ev.id);
     if(bannerImg){
       const img = document.createElement('img');
+      img.loading = "eager";
       img.src = `https://lh3.googleusercontent.com/d/${bannerImg.img_id}`;
       img.classList.add('banner-img');
 
