@@ -59,7 +59,7 @@
               <span class="loading" style="display: block; width: 60px; height:60px;">
               </span>
               <div class="info">
-                <div class="name"><span class="loading">캐릭터성 캐이름</span></div>
+                <div class="name"><span class="loading">캐릭성 캐이름</span></div>
                 <div class="birthday"><span class="loading">00-00</span></div>
               </div>
             </div>
@@ -132,10 +132,10 @@
       await loadMonth();
       await loadToday();
       
-      // document.querySelectorAll('.dummy-data').forEach(dummy => {
-      //   dummy.remove();
-      // })
-      // document.body.classList.remove('loading-page')      
+      document.querySelectorAll('.dummy-data').forEach(dummy => {
+        dummy.remove();
+      })
+      document.body.classList.remove('loading-page')      
     }
 
     initPage();
