@@ -206,8 +206,7 @@ function renderBirthdayCards(thisMonthBirthdays, onlyUpdate = false){
 
 // 이벤트 이미지 및 남은 시간 표시
 async function renderToday(thisMonthEvents){
-  // 이미지까지 Promise로 기다려주기!
-  const imagePromises = [];
+   const imagePromises = [];
   thisMonthEvents.forEach(async (ev) => {
     const isBd = ev.subtype.includes('bd');
     const template = document.querySelector('#current-event-template');
@@ -216,18 +215,21 @@ async function renderToday(thisMonthEvents){
     // 이벤트 이미지 추가(존재할경우)
     const bannerImg = await loadBannerImg(ev.id);
     if(bannerImg){
-      const img = document.createElement('img');
-      img.loading = "eager";
+      const img = new Image();
       img.src = `https://lh3.googleusercontent.com/d/${bannerImg.img_id}`;
+      img.loading = "eager";
       img.classList.add('banner-img');
 
-
-      const imgPromise = new Promise((resolve) => {
-        img.onload = resolve;
-        img.onerror = resolve; // 실패해도 넘어가기
+      const p = new Promise(res => {
+        if (img.complete && img.naturalWidth !== 0) {
+          res();
+        } else {
+          img.onload = res;
+          img.onerror = res;
+        }
       });
-      imagePromises.push(imgPromise);
-
+      
+      imagePromises.push(p);
       clone.querySelector('div.card-wrap').prepend(img);
     }
         
@@ -310,7 +312,7 @@ async function renderToday(thisMonthEvents){
       const currentTimeStr = now.toTimeString().slice(0,5); // "HH:MM"
       if (watchTimes.includes(currentTimeStr) && lastRenderTime !== currentTimeStr) {
         const { thisMonthEvents, thisMonthBirthdays } = await loadThisMonthData(); // 새로 로드!
-        renderToday(thisMonthEvents);
+        await renderToday(thisMonthEvents);
         if(currentTimeStr == "00:00"){
           renderBirthdayCards(thisMonthBirthdays, true); //디데이카드는 00시에만 로드
           // 월 넘어갔을 때 00시 00분에 달력 넘김
@@ -389,8 +391,7 @@ async function renderToday(thisMonthEvents){
     }
     updateCountdown();
   });
-
-  await Promise.all(imagePromises)
+   await Promise.all(imagePromises);
 }
 
 // document.addEventListener('DOMContentLoaded', async function () {
@@ -400,7 +401,7 @@ async function renderToday(thisMonthEvents){
 export async function loadToday(){
   const { thisMonthEvents, thisMonthBirthdays } = await loadThisMonthData();
 
-  renderToday(thisMonthEvents);
+  await renderToday(thisMonthEvents);
   renderBirthdayCards(thisMonthBirthdays);
 
 }
