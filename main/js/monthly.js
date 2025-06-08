@@ -13,6 +13,8 @@ export async function loadMonth(){
     events: await loadEvents(),
     fixedWeekCount: false,
     datesSet : () => {
+      document.querySelector('.dummy-data-calendar')?.classList.remove('dummy-data-calendar');
+
       //오늘 표시 보더 달 이동해도 유지되게
       document.querySelectorAll('td.fc-day-today').forEach(td => {
         const borderDiv = document.createElement('div');

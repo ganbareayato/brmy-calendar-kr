@@ -395,10 +395,8 @@ export async function loadToday(){
   const { thisMonthEvents, thisMonthBirthdays } = await loadThisMonthData();
 
   renderToday(thisMonthEvents);
-  renderBirthdayCards(thisMonthBirthdays);
-
-
   document.querySelectorAll('.dummy-data').forEach(dummy => dummy.remove());
-  document.querySelector('.dummy-data-calendar').classList.remove('dummy-data-calendar');
+
+  renderBirthdayCards(thisMonthBirthdays);
   document.body.classList.remove('loading-page');
 }

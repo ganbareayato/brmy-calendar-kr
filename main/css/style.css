@@ -72,7 +72,6 @@ img.placeholder-img{
   display:none;
 }
 
-
 div#calendar.dummy-data-calendar::before{
   content: "loading...";
   display: flex; /* flex를 써야 content를 중앙정렬할 수 있어 */

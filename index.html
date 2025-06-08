@@ -2,13 +2,29 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <meta name="description" content="브레마이 이벤트 및 캐릭터 생일 일정 등을 정리한 페이지입니다." />
+  <meta name="author" content="간바레아야토군" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>이벤트 달력</title>
+
+  <title>아야토네 탁상달력</title>
+  
+  <meta property="og:title" content="브레마이 비공식 일정표" />
+  <meta property="og:description" content="브레마이 이벤트 및 캐릭터 생일 일정을 정리한 페이지입니다." />
+  <meta property="og:image" content="" />
+  <meta property="og:url" content="https://ganbareayato.github.io/brmy-calendar-kr/"/>
+  <meta property="og:type" content="website" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="브레마이 비공식 일정표" />
+  <meta name="twitter:description" content="브레마이 이벤트 및 캐릭터 생일 일정을 정리한 페이지입니다." />
+  <meta name="twitter:image" content="" />
 
   <!-- FullCalendar CSS (v6.1.17) -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.css" rel="stylesheet" />
   <!-- 웹폰트 -->
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <!--투명 1픽셀 파비콘-->
+  <link rel="icon" href="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
   <!-- 사용자 정의 스타일 -->
   <link href="./main/css/style.css" rel="stylesheet" />
   <link href="./main/css/monthly.css" rel="stylesheet" />
@@ -119,7 +135,7 @@
 
   <!-- FullCalendar JS (v6.1.17) -->
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sinon@15.0.1/pkg/sinon.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/sinon@15.0.1/pkg/sinon.js"></script> -->
 
   <!-- 사용자 정의 스크립트 -->
   <script type="module" src="./main/js/calendar.js"></script>
@@ -133,7 +149,6 @@
     async function initPage() {
       await loadToday();
       await loadMonth();
-      // document.body.classList.remove('loading-page');
     }
 
     initPage();
