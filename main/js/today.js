@@ -1,9 +1,31 @@
 import { charList, loadEvents, cardList } from './calendar.js';
 // 테스트용
-// const clock = sinon.useFakeTimers(new Date('2025-06-25T15:59:59'));
+// const clock = sinon.useFakeTimers(new Date('2025-04-23T15:59:59'));
 // document.querySelector('.testBtn').addEventListener('click', ()=> {
 //   sinon.clock.tick(1000); // 1초 앞으로
 // })
+
+const SUBTYPE_LIST = {
+  'std': "통상",
+  'bd': "생일",
+  'limited': "한정",
+  'cafe': "카페바",
+  'pt': "브레파",
+  'not': "통상",
+  'main': "본부",
+  'sim': "교제부",
+  'admin': "관리부",
+  'watchdog': "강행부",
+  'nego': "교섭부",
+  'st': "특무부",
+};
+
+
+function getCharInfo(birthday){
+  const charInfo = Object.entries(charList).find(([name, info]) => info.birthday === birthday);
+  return charInfo;
+}
+
 
 
 //특정 시간마다 렌더링 체크용
@@ -141,20 +163,20 @@ function renderBirthdayCards(thisMonthBirthdays, onlyUpdate = false){
       if(!ev.classNames.includes('bd-campaign')){ //캠페인은 dday에 띄워주면 안되니까 if문처리
         const template = document.querySelector('#bd-char-template');
         const clone = template.content.cloneNode('true');
-
-        const bdText = getBdMMDDByKst(ev.start);
-        const charname = Object.entries(charList).find(([name, info]) => info.birthday === bdText);
+        const bd = getBdMMDDByKst(ev.start);
+        const charInfo = getCharInfo(bd);
         const sdImg = (location.hostname === 'ganbareayato.github.io')
-          ? `/brmy-calendar-kr/main/img/sd/${charname[0]}.png`
-          : `/main/img/sd/${charname[0]}.png`;
+          ? `/brmy-calendar-kr/main/img/sd/${charInfo[0]}.png`
+          : `/main/img/sd/${charInfo[0]}.png`;
         clone.querySelector('.dday-wrap img').src = sdImg;
         clone.querySelector('.dday-wrap').classList.add(`event-${ev.id}`)
   
         clone.querySelector('.dday-wrap .name').innerHTML = `${ev.title.replace(' 생일 가챠', '')}`;
         clone.querySelector('.dday-wrap .birthday').textContent = getBdMMDDByKst(new Date(ev.start));
         clone.querySelector('.dday-wrap .dday').textContent = `${ev.start}`;
-        clone.querySelector('.dday-wrap').classList.add(charname[0]);
-        clone.querySelector('.dday-wrap').style.setProperty('--char-color', charname[1].color);
+        clone.querySelector('.dday-wrap').classList.add(charInfo[0]);
+        clone.querySelector('.dday-wrap').style.setProperty('--char-color', charInfo[1].color);            
+
         //dday 계산
         const start = new Date(ev.start);
   
@@ -216,6 +238,18 @@ async function renderToday(thisMonthEvents){
 
     clone.querySelector('h3.title').textContent = ev.title;
     clone.querySelector('div.timer-wrap').classList.add(`event-${ev.id}`);
+
+    //서브타이틀
+    ev.subtype.forEach(subtype => {
+      const span = document.createElement('span');
+      span.classList.add(subtype);
+      span.textContent = SUBTYPE_LIST[subtype];
+      if(subtype == 'bd'){
+        const charInfo = getCharInfo(getBdMMDDByKst(ev.start));
+        span.style.setProperty('--char-color', charInfo[1].color);
+      } 
+      clone.querySelector('div.title-wrap .subtype-list').appendChild(span);
+    })
         
     const now = new Date();
     // 생일은 이벤트 시작까지~ 붙여줄 이유 없으니까 그냥 아예 false 처리한것임

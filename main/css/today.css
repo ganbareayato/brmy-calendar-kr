@@ -4,11 +4,74 @@ img.banner-img{
     border-radius: 1rem;
 }
 
+/* 타이틀바 */
 h3.title{
     text-align: center;
-    margin-top:4px;
+    margin-top:0px;
     margin-bottom: 12px;
     font-size: 1.1rem;
+}
+
+div.subtype-list{
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 4px;
+}
+
+div.subtype-list span{
+  display:inline-block;
+  border:1px solid;
+  border-radius: 1rem;
+  padding:3px 6px;
+  margin:2px;
+  color:white;
+  font-weight: 500;
+}
+
+div.subtype-list span.std,
+div.subtype-list span.not{
+  background-color: #86b8e0;
+}
+
+div.subtype-list span.limited{
+  background-color:#eb7575;
+  background-image: linear-gradient(135deg, #fd9494, #a084ca);
+}
+
+div.subtype-list span.cafe{
+  background-color:#d8ae83;
+}
+
+div.subtype-list span.bd{
+  background-color:var(--char-color);
+}
+
+div.subtype-list span.pt{
+  background-image: linear-gradient(135deg, #da64f7, #2ca5f1, #5ce4d4);
+}
+
+div.subtype-list span.main{
+  background-color: #2384de;
+}
+
+div.subtype-list span.sim{
+  background-color: #f17eb3;
+}
+
+div.subtype-list span.admin{
+  background-color: #e0a82b;
+}
+
+div.subtype-list span.watchdog{
+  background-color: #bb3838;
+}
+
+div.subtype-list span.nego{
+  background-color: #9a21b1;
+}
+
+div.subtype-list span.st{
+  background-color: #6baa3d;
 }
 
 /* 현재 이벤트 타이머 */
