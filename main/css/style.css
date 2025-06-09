@@ -43,15 +43,14 @@ h2{
 /* 페이지 로딩 */
 .dummy-data span.loading{
   position: relative;
-  color: transparent; /* 데이터는 안 보이게 */
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   background-color: #dadada;
   border-radius: 4px;
   overflow: hidden;
-}
-.dummy-data span.loading {
-  background-color: #dadada;       /* 첫 번째 색상 */
   animation: pulse 1.4s infinite alternate;
-  border-radius: 4px;
 }
 
 .dummy-data .time-block div.value span.loading{
@@ -74,7 +73,7 @@ img.placeholder-img{
 
 div#calendar.dummy-data-calendar::before{
   content: "loading...";
-  display: flex; /* flex를 써야 content를 중앙정렬할 수 있어 */
+  display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
