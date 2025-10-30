@@ -327,8 +327,8 @@ async function renderToday(thisMonthEvents){
       for(let i=1; i<=4; i++){
         const checkShiftStart = new Date(start);
         checkShiftStart.setDate( start.getDate() + (i*3) )
-        console.log(now, checkShiftStart)
         if(now < checkShiftStart){
+          console.log(ojtShift[i])
           subtitleNow.textContent = `${ojtShift[i]} 시프트 중・다음 시프트까지`
           subtitleNow.classList.add('subtitle-ojt')
           if(i==4) {
