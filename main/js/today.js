@@ -115,7 +115,8 @@ async function loadThisMonthData(){
 
   // 이번 달에 걸쳐 있는 이벤트 필터링
   const thisMonthStart = new Date(currentYear, currentMonth, 1, 0, 0, 0);
-  const thisMonthEnd = new Date(currentYear, currentMonth + 1, 0, 23, 59, 59);
+  // const thisMonthEnd = new Date(currentYear, currentMonth + 1, 0, 23, 59, 59);
+  const thisMonthEnd = new Date(currentYear, currentMonth + 1, 1, 23, 59, 59, 999); //1일이 생일인 캐릭터 캠페인 배너 안떠서 수정
   
   const thisMonthEvents = eventList
   .filter(ev => {
