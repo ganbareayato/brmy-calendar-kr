@@ -10,6 +10,7 @@ const SUBTYPE_LIST = {
   'bd': "생일",
   'limited': "한정",
   'cafe': "카페바",
+  'ojt': "한정",
   'pt': "브레파",
   'not': "통상",
   'main': "본부",
