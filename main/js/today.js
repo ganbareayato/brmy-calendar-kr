@@ -10,7 +10,7 @@ const SUBTYPE_LIST = {
   'bd': "생일",
   'limited': "한정",
   'cafe': "카페바",
-  'ojt': "한정",
+  'ojt': "OJT",
   'pt': "브레파",
   'not': "통상",
   'main': "본부",
@@ -309,7 +309,8 @@ async function renderToday(thisMonthEvents){
         }
       }
     }
-       if( ev.classNames.includes("type-ojt") && now < gachaEnd ){
+    // OJT 이벤트 시프트 계산 로직
+    if( ev.classNames.includes("type-ojt") && now < gachaEnd ){
       subtitleNow.classList.add('subtitle-ojt')
       const ojtCardList = cardList.filter(el => el['event_id'] === ev.id);
       let ojtShift = {
@@ -326,6 +327,7 @@ async function renderToday(thisMonthEvents){
       for(let i=1; i<=4; i++){
         const checkShiftStart = new Date(start);
         checkShiftStart.setDate( start.getDate() + (i*3) )
+        console.log(now, checkShiftStart)
         if(now < checkShiftStart){
           subtitleNow.textContent = `${ojtShift[i]} 시프트 중・다음 시프트까지`
           subtitleNow.classList.add('subtitle-ojt')
