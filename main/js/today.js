@@ -328,7 +328,6 @@ async function renderToday(thisMonthEvents){
         const checkShiftStart = new Date(start);
         checkShiftStart.setDate( start.getDate() + (i*3) )
         if(now < checkShiftStart){
-          console.log(ojtShift[i])
           subtitleNow.textContent = `${ojtShift[i]} 시프트 중・다음 시프트까지`
           subtitleNow.classList.add('subtitle-ojt')
           if(i==4) {
@@ -400,7 +399,7 @@ async function renderToday(thisMonthEvents){
             else if(isEvent){
               if(checkShiftDate) getTime = getRemainingTime(checkShiftDate);
               else getTime = getRemainingTime(end);
-              if(!subtitleNow.classList.contains('subtitle-cafe') || !subtitleNow.classList.contains('subtitle-ojt'))
+              if(!subtitleNow.classList.contains('subtitle-cafe') && !subtitleNow.classList.contains('subtitle-ojt'))
               subtitleNow.textContent = `이벤트 종료까지`;
             }
             //오늘보다 종료날짜가 이전(이벤트끝) && 오늘보다 가챠날짜가 이후(가챠진행중)
