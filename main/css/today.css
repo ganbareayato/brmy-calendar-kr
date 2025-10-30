@@ -42,6 +42,9 @@ div.subtype-list span.limited{
 div.subtype-list span.cafe{
   background-color:#d8ae83;
 }
+div.subtype-list span.ojt{
+  background-color:#fc5353;
+}
 
 div.subtype-list span.bd{
   background-color:var(--char-color);
