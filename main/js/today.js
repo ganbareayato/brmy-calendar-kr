@@ -1,9 +1,9 @@
 import { charList, loadEvents, cardList } from './calendar.js';
 // 테스트용
-// const clock = sinon.useFakeTimers(new Date('2025-04-23T15:59:59'));
-// document.querySelector('.testBtn').addEventListener('click', ()=> {
-//   sinon.clock.tick(1000); // 1초 앞으로
-// })
+const clock = sinon.useFakeTimers(new Date('2025-12-17T15:59:59'));
+document.querySelector('.testBtn').addEventListener('click', ()=> {
+  sinon.clock.tick(1000); // 1초 앞으로
+})
 
 const SUBTYPE_LIST = {
   'std': "통상",
@@ -12,6 +12,7 @@ const SUBTYPE_LIST = {
   'cafe': "카페바",
   'ojt': "OJT",
   'pt': "브레파",
+  'collab': "콜라보",
   'not': "통상",
   'main': "본부",
   'sim': "교제부",
@@ -338,6 +339,38 @@ async function renderToday(thisMonthEvents){
         }
       }
     }
+
+    // 한정(콜라보) 이벤트 시프트 계산 로직
+    if( ev.classNames.includes("type-collab") && now < gachaEnd ){
+      subtitleNow.classList.add('subtitle-collab')
+      const collabCardList = cardList.filter(el => el['event_id'] === ev.id);
+      let collabShift = {
+        1: collabCardList.find(el => el['source'] === 'reward'),
+        2: collabCardList.find(el => el['rarity'] === 'sr' && el['source'] === 'gacha'),
+        3: collabCardList.find(el => el['rarity'] === 'ssr' && el['order'] == 1),
+        4: collabCardList.find(el => el['rarity'] === 'ssr' && el['order'] == 2),
+        5: collabCardList.find(el => el['rarity'] === 'ssr' && el['order'] == 3),
+        6: collabCardList.find(el => el['rarity'] === 'r'),
+      }
+
+      for (const key in collabShift){
+        collabShift[key] = charList[collabShift[key].char_id].name;
+      }
+
+      for(let i=1; i<=6; i++){
+        const checkShiftStart = new Date(start);
+        checkShiftStart.setDate( start.getDate() + (i*3) )
+        if(now < checkShiftStart){
+          subtitleNow.textContent = `${collabShift[i]} 시프트 중・다음 시프트까지`
+          subtitleNow.classList.add('subtitle-collab')
+          if(i==6) {
+            subtitleNow.textContent = `${collabShift[i]} 시프트 중・이벤트 종료까지`
+          }
+          checkShiftDate = new Date(checkShiftStart)
+          break;
+        }
+      }
+    }
     
 
     // ----------------------------- 카운트다운 함수 위치 ----------------------------- //
@@ -399,7 +432,7 @@ async function renderToday(thisMonthEvents){
             else if(isEvent){
               if(checkShiftDate) getTime = getRemainingTime(checkShiftDate);
               else getTime = getRemainingTime(end);
-              if(!subtitleNow.classList.contains('subtitle-cafe') && !subtitleNow.classList.contains('subtitle-ojt'))
+              if(!subtitleNow.classList.contains('subtitle-cafe') && !subtitleNow.classList.contains('subtitle-ojt') && !subtitleNow.classList.contains('subtitle-collab'))
               subtitleNow.textContent = `이벤트 종료까지`;
             }
             //오늘보다 종료날짜가 이전(이벤트끝) && 오늘보다 가챠날짜가 이후(가챠진행중)

@@ -35,8 +35,11 @@ div.subtype-list span.not{
 }
 
 div.subtype-list span.limited{
-  background-color:#eb7575;
   background-image: linear-gradient(135deg, #fd9494, #a084ca);
+}
+
+div.subtype-list span.collab{
+  background-image: linear-gradient(135deg, #7b9add, #9795ef);
 }
 
 div.subtype-list span.cafe{
